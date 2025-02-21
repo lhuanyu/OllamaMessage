@@ -33,7 +33,7 @@ struct Prompt: Codable, Identifiable, Hashable, Equatable {
     }
 }
 
-class PromptManager: ObservableObject {
+final class PromptManager: ObservableObject, @unchecked Sendable {
     
     static let shared = PromptManager()
     

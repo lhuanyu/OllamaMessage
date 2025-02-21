@@ -6,11 +6,10 @@
 //
 
 import SwiftUI
-import SwiftUIX
 import SwiftUIIntrospect
+import SwiftUIX
 
 struct MessageListView: View {
-    
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var session: DialogueSession
     @FocusState var isTextFieldFocused: Bool
@@ -45,7 +44,7 @@ struct MessageListView: View {
                             Text(session.configuration.model)
                                 .bold()
                                 .foregroundColor(.label)
-                            Image(systemName:"chevron.right")
+                            Image(systemName: "chevron.right")
                                 .font(.system(size: 10))
                                 .foregroundColor(.secondary)
                         }
@@ -100,7 +99,7 @@ struct MessageListView: View {
     @Namespace var animation
     
     private let bottomID = "bottomID"
-    
+
     var contentView: some View {
         ScrollViewReader { proxy in
             ZStack(alignment: .bottomLeading) {
@@ -112,7 +111,7 @@ struct MessageListView: View {
                                     ConversationView(
                                         conversation: conversation,
                                         namespace: animation,
-                                        lastConversationDate: (index > 0 ? session.conversations[index-1].date : nil)
+                                        lastConversationDate: index > 0 ? session.conversations[index - 1].date : nil
                                     ) { conversation in
                                         Task { @MainActor in
                                             await session.retry(conversation, scroll: {
@@ -122,8 +121,8 @@ struct MessageListView: View {
                                     } deleteHandler: {
                                         withAnimation(after: .milliseconds(500)) {
                                             session.removeConversation(at: index)
-                                            session.service.messages.remove(at: index*2)
-                                            session.service.messages.remove(at: index*2)
+                                            session.service.messages.remove(at: index * 2)
+                                            session.service.messages.remove(at: index * 2)
                                         }
                                     }
                                     .id(index)
@@ -154,27 +153,31 @@ struct MessageListView: View {
                         .preference(key: HeightPreferenceKey.self, value: geo.frame(in: .global).height)
                         .preference(key: MaxYPreferenceKey.self, value: geo.frame(in: .global).maxY)
                         .onPreferenceChange(HeightPreferenceKey.self) { value in
-                            if let value = value {
-                                if keyboadWillShow {
-                                    keyboadWillShow = false
-                                    withAnimation(.easeOut(duration: 0.1), after: .milliseconds(60)) {
-                                        scrollToBottom(proxy: proxy)
-                                    }
-                                }
-                                scrollViewHeight = value
-                            }
-                        }
-                        .onPreferenceChange(MaxYPreferenceKey.self) { value in
-                            if let value = value {
-                                if let scrollViewMaxY = scrollViewMaxY  {
-                                    let delta = scrollViewMaxY - value
-                                    if delta > 0 && delta < 30 {
-                                        withAnimation(.easeOut(duration: 0.1)) {
+                            Task { @MainActor in
+                                if let value = value {
+                                    if keyboadWillShow {
+                                        keyboadWillShow = false
+                                        withAnimation(.easeOut(duration: 0.1), after: .milliseconds(60)) {
                                             scrollToBottom(proxy: proxy)
                                         }
                                     }
+                                    scrollViewHeight = value
                                 }
-                                scrollViewMaxY = value
+                            }
+                        }
+                        .onPreferenceChange(MaxYPreferenceKey.self) { value in
+                            Task { @MainActor in
+                                if let value = value {
+                                    if let scrollViewMaxY = scrollViewMaxY {
+                                        let delta = scrollViewMaxY - value
+                                        if delta > 0, delta < 30 {
+                                            withAnimation(.easeOut(duration: 0.1)) {
+                                                scrollToBottom(proxy: proxy)
+                                            }
+                                        }
+                                    }
+                                    scrollViewMaxY = value
+                                }
                             }
                         }
                         .introspect(.scrollView, on: .iOS(.v16, .v17, .v18)) { scrollView in
@@ -198,7 +201,7 @@ struct MessageListView: View {
             }
 #if os(iOS)
             .onReceive(keyboardWillChangePublisher) { value in
-                if isTextFieldFocused && value {
+                if isTextFieldFocused, value {
                     self.keyboadWillShow = value
                 }
             }.onReceive(keyboardDidChangePublisher) { value in
@@ -212,10 +215,10 @@ struct MessageListView: View {
                     }
                 }
             }
-            .onAppear() {
+            .onAppear {
                 scrollToBottom(proxy: proxy)
                 if session.suggestions.isEmpty {
-                    session.createSuggestions() {
+                    session.createSuggestions {
                         scrollToBottom(proxy: proxy, anchor: $0)
                     }
                 }
@@ -223,58 +226,58 @@ struct MessageListView: View {
             .onChange(of: session) { session in
                 scrollToBottom(proxy: proxy)
                 if session.suggestions.isEmpty {
-                    session.createSuggestions() {
+                    session.createSuggestions {
                         scrollToBottom(proxy: proxy, anchor: $0)
                     }
                 }
             }
 #else
-            .onAppear() {
-                scrollToBottom(proxy: proxy)
-                addKeyboardEventMonitorForPromptSearching()
-                if session.suggestions.isEmpty {
-                    session.createSuggestions() {
-                        scrollToBottom(proxy: proxy, anchor: $0)
+            .onAppear {
+                    scrollToBottom(proxy: proxy)
+                    addKeyboardEventMonitorForPromptSearching()
+                    if session.suggestions.isEmpty {
+                        session.createSuggestions {
+                            scrollToBottom(proxy: proxy, anchor: $0)
+                        }
                     }
                 }
-            }
-            .onDisappear() {
-                if let monitor = monitor {
-                    NSEvent.removeMonitor(monitor)
-                }
-            }
-            .onChange(of: session) { session in
-                selectedPromptIndex = nil
-                userHasChangedSelection = false
-                scrollToBottom(proxy: proxy)
-                if session.suggestions.isEmpty {
-                    session.createSuggestions() {
-                        scrollToBottom(proxy: proxy, anchor: $0)
+                .onDisappear {
+                    if let monitor = monitor {
+                        NSEvent.removeMonitor(monitor)
                     }
                 }
-            }
+                .onChange(of: session) { session in
+                    selectedPromptIndex = nil
+                    userHasChangedSelection = false
+                    scrollToBottom(proxy: proxy)
+                    if session.suggestions.isEmpty {
+                        session.createSuggestions {
+                            scrollToBottom(proxy: proxy, anchor: $0)
+                        }
+                    }
+                }
 #endif
-            .onChange(of: selectedPromptIndex, perform: onSelectedPromptIndexChange)
-            .onChange(of: session.input) { input in
-                #if os(iOS)
-                withAnimation {
-                    filterPrompts()
-                }
-                #else
-                filterPrompts()
-                #endif
-            }
-            .onChange(of: session.inputData) { data in
-                if let _ = data {
+                .onChange(of: selectedPromptIndex, perform: onSelectedPromptIndexChange)
+                .onChange(of: session.input) { _ in
 #if os(iOS)
-                    withAnimation(after: .milliseconds(100)) {
-                        scrollToBottom(proxy: proxy)
+                    withAnimation {
+                        filterPrompts()
                     }
+#else
+                    filterPrompts()
+#endif
+                }
+                .onChange(of: session.inputData) { data in
+                    if let _ = data {
+#if os(iOS)
+                        withAnimation(after: .milliseconds(100)) {
+                            scrollToBottom(proxy: proxy)
+                        }
 #else
 
 #endif
+                    }
                 }
-            }
         }
     }
     
@@ -292,19 +295,18 @@ struct MessageListView: View {
                 session.bubbleText = session.input
             }
             session.isSending = true
-            await session.send() {
+            await session.send {
                 scrollToBottom(proxy: proxy, anchor: $0)
             }
         }
     }
     
+    @MainActor
     private func scrollToBottom(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {
         proxy.scrollTo(bottomID, anchor: anchor)
     }
     
-    
-    
-    //MARK: - Search Prompt
+    // MARK: - Search Prompt
     
 #if os(iOS)
     
@@ -347,7 +349,7 @@ struct MessageListView: View {
                                 .id(index)
                                 .tag(index)
 #if os(macOS)
-                                .toolTip(prompt.prompt)
+                                    .toolTip(prompt.prompt)
 #endif
                             }
                         }
@@ -357,11 +359,11 @@ struct MessageListView: View {
                     .border(.blue, width: 2)
                     .frame(height: promptListHeight)
 #if os(macOS)
-                    .onChange(of: selectedPromptIndex) { selectedPromptIndex in
-                        if let selectedPromptIndex = selectedPromptIndex, userHasChangedSelection {
-                            promptListProxy.scrollTo(selectedPromptIndex, anchor: .bottom)
+                        .onChange(of: selectedPromptIndex) { selectedPromptIndex in
+                            if let selectedPromptIndex = selectedPromptIndex, userHasChangedSelection {
+                                promptListProxy.scrollTo(selectedPromptIndex, anchor: .bottom)
+                            }
                         }
-                    }
 #endif
                 }
             }
@@ -370,9 +372,9 @@ struct MessageListView: View {
             .padding(.trailing, promptListTrailingPadding)
             .padding(.bottom, 50)
 #if os(macOS)
-            .onAppear() {
-                selectedPromptIndex = 0
-            }
+                .onAppear {
+                    selectedPromptIndex = 0
+                }
 #endif
         } else {
             EmptyView()
@@ -407,7 +409,7 @@ struct MessageListView: View {
 #if os(macOS)
         min(240, max(CGFloat(prompts.count * 24), 24))
 #else
-        if verticalSizeClass == .compact && isTextFieldFocused {
+        if verticalSizeClass == .compact, isTextFieldFocused {
             return min(88, max(CGFloat(prompts.count * 44), 44))
         } else {
             return min(220, max(CGFloat(prompts.count * 44), 44))
@@ -464,7 +466,7 @@ struct MessageListView: View {
             let input = session.input.dropFirst()
             prompts = PromptManager.shared.prompts.filter { prompt in
                 let p = prompt.cmd.lowercased().replacingOccurrences(of: "_", with: "")
-                return p.range(of:input.lowercased()) != nil || prompt.cmd.lowercased().range(of: input.lowercased()) != nil
+                return p.range(of: input.lowercased()) != nil || prompt.cmd.lowercased().range(of: input.lowercased()) != nil
             }
         }
 #if os(macOS)
@@ -488,18 +490,14 @@ struct MessageListView: View {
         }
 #endif
     }
-    
-    
 }
 
 #if os(iOS)
-extension MessageListView: KeyboardReadable {
-    
-}
+extension MessageListView: KeyboardReadable {}
 #endif
 
 struct ScrollViewOffsetPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat? = nil
+    static let defaultValue: CGFloat? = nil
     
     static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
         value = value ?? nextValue()
@@ -507,7 +505,7 @@ struct ScrollViewOffsetPreferenceKey: PreferenceKey {
 }
 
 struct MaxYPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat? = nil
+    static let defaultValue: CGFloat? = nil
     
     static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
         value = nextValue() ?? value
@@ -515,7 +513,7 @@ struct MaxYPreferenceKey: PreferenceKey {
 }
 
 struct HeightPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat? = nil
+    static let defaultValue: CGFloat? = nil
     
     static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
         value = value ?? nextValue()

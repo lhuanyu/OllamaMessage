@@ -30,9 +30,14 @@ class OllamaService: @unchecked Sendable {
     }
     
     func createSuggestions() async throws -> [String] {
-        let chatHistory = messages.reduce("") { $0 + "[\($1.role)]\($1.content)" + "\n" }
+        let chatHistory = messages.reduce("") { $0 + "[\($1.role)]:\($1.content)" + "\n" }
         let prompt = """
-        Generate \(suggestionsCount) suggestions for user input based on the conversation below: \n\(chatHistory)\n The suggestions should use the same language as the main language of the conversation. The suggestions should be short and unique. Return the suggestions only in an array format, such as: ["suggestion1", "suggestion2", "suggestion3"], do not use markdown syntax. You must return \(suggestionsCount) suggestions.
+        There is a conversation between a user and an assistant. The conversation is as follows: \n\(chatHistory)\n
+        - Generate \(suggestionsCount) suggestions for the next user input based on the conversation above.
+        - The suggestions should use the same language of the locale '\(Locale.current)'. 
+        - The suggestions should be short and unique.
+        - Return the suggestions only in an array format, such as: ["suggestion1", "suggestion2", "suggestion3"], do not use markdown syntax. 
+        - You must return \(suggestionsCount) suggestions.
         """
         let suggestions = try await chat(prompt, model: "qwen2:latest", includingHistory: false)
         print("Suggestions: \(suggestions)")
@@ -86,11 +91,11 @@ class OllamaService: @unchecked Sendable {
             
             let (bytes, _) = try await URLSession.shared.bytes(for: request)
             
-            var responseContent = ""
 
             return AsyncThrowingStream<String, Error> { continuation in
                 Task(priority: .userInitiated) {
                     do {
+                        var responseContent = ""
                         for try await line in bytes.lines {
                             responseContent += line
                             print("Received chunk: \(line)")

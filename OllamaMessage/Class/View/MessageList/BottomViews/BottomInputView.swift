@@ -55,13 +55,11 @@ struct BottomInputView: View {
     }
     
     
-    private var leadingComposerDelta: CGFloat {
 #if os(iOS)
-        17
+    private let leadingComposerDelta: CGFloat = 17
 #else
-        16
+    private let leadingComposerDelta: CGFloat = 16
 #endif
-    }
     
     
 }

@@ -11,7 +11,7 @@ enum ChatService: String, CaseIterable {
     case ollama
 }
 
-class AppConfiguration: ObservableObject {
+final class AppConfiguration: ObservableObject, @unchecked Sendable {
     
     static let shared = AppConfiguration()
     

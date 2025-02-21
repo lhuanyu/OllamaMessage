@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 class OllamaConfiguration: ObservableObject {
-    static let shared = OllamaConfiguration()
+    @MainActor static let shared = OllamaConfiguration()
     
     @AppStorage("ollamaAPIHost") var apiHost: String = ""
     

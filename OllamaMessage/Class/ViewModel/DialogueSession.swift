@@ -252,11 +252,12 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
 
     }
     
+    @MainActor
     func createSuggestions(scroll: ((UnitPoint) -> Void)? = nil) {
         guard AppConfiguration.shared.isReplySuggestionsEnabled else {
             return
         }
-        Task { @MainActor in
+        Task {
             do {
                 let suggestions = try await service.createSuggestions()
                 print(suggestions)

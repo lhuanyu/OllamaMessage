@@ -50,7 +50,8 @@ struct GeneralSettingsView: View {
 
 struct PromptSettingsView: View {
     
-    enum Item: String, CaseIterable, Identifiable, Hashable {
+    @MainActor
+    enum Item: String, CaseIterable, @preconcurrency Identifiable, Hashable {
         case syncPrompts = "syncPrompts"
         case customPrompts = "customPrompts"
         
