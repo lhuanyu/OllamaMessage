@@ -3,9 +3,9 @@
 OllamaMessage is an iMessage-style application designed for interacting with the Ollama service. It supports both iOS and macOS, providing a seamless chat experience.
 
 <p float="left">
-  <img src="screenshot_01.jpg" width="300" />
-  <img src="screenshot_02.jpg" width="300" /> 
-  <img src="screenshot_03.jpg" width="300" /> 
+  <img src="screenshot_01.jpg" width="250" />
+  <img src="screenshot_02.jpg" width="250" /> 
+  <img src="screenshot_03.jpg" width="250" /> 
 </p>
 
 
