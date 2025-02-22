@@ -33,7 +33,7 @@ class OllamaService: @unchecked Sendable {
         let chatHistory = messages.reduce("") { $0 + "[\($1.role)]:\($1.content)" + "\n" }
         let prompt = """
         There is a conversation between a user and an assistant. The conversation is as follows: \n\(chatHistory)\n
-        - Generate \(suggestionsCount) suggestions for the next user input based on the conversation above.
+        - Generate \(suggestionsCount) suggestions for the next quetion user might ask based on the conversation above.
         - The suggestions should use the same language of the locale '\(Locale.current)'. 
         - The suggestions should be short and unique.
         - Return the suggestions only in an array format, such as: ["suggestion1", "suggestion2", "suggestion3"], do not use markdown syntax. 
@@ -66,7 +66,6 @@ class OllamaService: @unchecked Sendable {
     
     func chatStream(_ input: String, data: Data? = nil) async throws -> AsyncThrowingStream<String, Error> {
         do {
-            
             let chatRequest = OllamaChatRequest(
                 model: configuration.model,
                 messages: messages + [
@@ -75,7 +74,8 @@ class OllamaService: @unchecked Sendable {
                         content: input,
                         images: data != nil ? [data!.base64EncodedString()] : nil
                     )
-                ]
+                ],
+                options: .init(temperature: configuration.temperature)
             )
             
             guard let url = URL(string: AppConfiguration.shared.ollamaAPIHost + "/api/chat") else {
@@ -91,7 +91,6 @@ class OllamaService: @unchecked Sendable {
             
             let (bytes, _) = try await URLSession.shared.bytes(for: request)
             
-
             return AsyncThrowingStream<String, Error> { continuation in
                 Task(priority: .userInitiated) {
                     do {
