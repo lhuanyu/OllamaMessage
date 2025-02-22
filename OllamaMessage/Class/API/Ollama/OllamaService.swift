@@ -64,6 +64,9 @@ class OllamaService: @unchecked Sendable {
         return decoder
     }()
     
+    private var streamingTask: Task<Void, Never>?
+    private var currentURLSessionTask: URLSessionTask?
+
     func chatStream(_ input: String, data: Data? = nil) async throws -> AsyncThrowingStream<String, Error> {
         do {
             let chatRequest = OllamaChatRequest(
@@ -90,14 +93,24 @@ class OllamaService: @unchecked Sendable {
             request.timeoutInterval = 60 * 5
             
             let (bytes, _) = try await URLSession.shared.bytes(for: request)
+
+            currentURLSessionTask = bytes.task
             
             return AsyncThrowingStream<String, Error> { continuation in
-                Task(priority: .userInitiated) {
+                streamingTask = Task(priority: .userInitiated) {
                     do {
                         var responseContent = ""
                         for try await line in bytes.lines {
+
+                            if Task.isCancelled {
+                                print("Streaming cancelled")
+                                continuation.finish()
+                                return
+                            }
+                            
                             responseContent += line
                             print("Received chunk: \(line)")
+                            
                             if let response = try? decoder.decode(OllamaResponse.self, from: Data(line.utf8)) {
                                 continuation.yield(response.message.content)
                             } else if let finalResponse = try? decoder.decode(OllamaFinalResponse.self, from: Data(line.utf8)) {
@@ -109,7 +122,13 @@ class OllamaService: @unchecked Sendable {
                         appendNewMessage(input: input, reply: responseContent)
                         continuation.finish()
                     } catch {
-                        continuation.finish(throwing: error)
+                        let error = error as NSError
+                        if error.domain == NSURLErrorDomain && error.code == NSURLErrorCancelled {
+                            print("Streaming cancelled")
+                            continuation.finish()
+                        } else {
+                            continuation.finish(throwing: error)
+                        }
                     }
                 }
             }
@@ -117,6 +136,18 @@ class OllamaService: @unchecked Sendable {
             print("Error: \(error)")
             throw error
         }
+    }
+    
+    private var isCancellingStream = false
+    
+    func stopStreaming() {
+        isCancellingStream = true
+        print("Stopping streaming...")
+        streamingTask?.cancel()
+        currentURLSessionTask?.cancel()
+        streamingTask = nil
+        currentURLSessionTask = nil
+        isCancellingStream = false
     }
     
     /// no stream

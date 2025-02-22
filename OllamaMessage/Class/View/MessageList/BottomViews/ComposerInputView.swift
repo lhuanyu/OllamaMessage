@@ -149,15 +149,29 @@ struct ComposerInputView: View {
             .keyboardShortcut(.defaultAction)
         } else {
 #if os(iOS)
-            Button {} label: {
-                Image(systemName: "mic")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 18, height: 18)
-                    .foregroundColor(.secondary)
-                    .opacity(0.7)
+            if session.isStreaming {
+                Button {
+                    session.stopStreaming()
+                } label: {
+                    Image(systemName: "stop.circle.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(.accentColor)
+                }
+                .offset(x: -2, y: 0)
+            } else {
+                Button {} label: {
+                    Image(systemName: "mic")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 18, height: 18)
+                        .foregroundColor(.secondary)
+                        .opacity(0.7)
+                }
+                .offset(x: -4, y: -4)
             }
-            .offset(x: -4, y: -4)
+
 #endif
         }
     }

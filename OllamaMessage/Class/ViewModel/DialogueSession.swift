@@ -224,6 +224,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         } catch {
 #if os(iOS)
             withAnimation {
+                isStreaming = false
                 conversation.errorDesc = error.localizedDescription
                 lastConversationData?.sync(with: conversation)
                 scroll?(.bottom)
@@ -250,6 +251,11 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         save()
 #endif
 
+    }
+    
+    @MainActor
+    func stopStreaming() {
+        service.stopStreaming()
     }
     
     @MainActor
