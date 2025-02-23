@@ -42,28 +42,6 @@ struct LeadingComposerView: View {
                     .frame(height: height)
                     .foregroundColor(.gray)
             }
-#if os(iOS)
-            if session.inputData == nil && !session.isSending {
-                Menu {
-                    ForEach(PromptManager.shared.prompts) { promt in
-                        Button {
-                            session.input = promt.prompt
-                        } label: {
-                            Text(promt.act)
-                        }
-                    }
-                } label: {
-                    Image(systemName: "person.text.rectangle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: height)
-                        .foregroundColor(.gray)
-                        .ignoresSafeArea(.keyboard)
-                }
-                .menuIndicator(.hidden)
-                .ignoresSafeArea(.keyboard)
-            }
-#endif
         }
         .macButtonStyle()
         .padding(.horizontal, 8)

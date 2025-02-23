@@ -106,6 +106,9 @@ struct MessageListView: View {
                 VStack(spacing: 0) {
                     GeometryReader { geo in
                         ScrollView {
+                            if session.conversations.isEmpty {
+                                Color.clear
+                            }
                             VStack(spacing: 0) {
                                 ForEach(enumerating: Array(session.conversations.enumerated())) { index, conversation in
                                     ConversationView(
@@ -150,43 +153,43 @@ struct MessageListView: View {
                             .frame(minHeight: geo.size.height)
                         }
 #if os(iOS)
-                        .preference(key: HeightPreferenceKey.self, value: geo.frame(in: .global).height)
-                        .preference(key: MaxYPreferenceKey.self, value: geo.frame(in: .global).maxY)
-                        .onPreferenceChange(HeightPreferenceKey.self) { value in
-                            Task { @MainActor in
-                                if let value = value {
-                                    if keyboadWillShow {
-                                        keyboadWillShow = false
-                                        withAnimation(.easeOut(duration: 0.1), after: .milliseconds(60)) {
-                                            scrollToBottom(proxy: proxy)
-                                        }
-                                    }
-                                    scrollViewHeight = value
-                                }
-                            }
-                        }
-                        .onPreferenceChange(MaxYPreferenceKey.self) { value in
-                            Task { @MainActor in
-                                if let value = value {
-                                    if let scrollViewMaxY = scrollViewMaxY {
-                                        let delta = scrollViewMaxY - value
-                                        if delta > 0, delta < 30 {
-                                            withAnimation(.easeOut(duration: 0.1)) {
+                            .preference(key: HeightPreferenceKey.self, value: geo.frame(in: .global).height)
+                            .preference(key: MaxYPreferenceKey.self, value: geo.frame(in: .global).maxY)
+                            .onPreferenceChange(HeightPreferenceKey.self) { value in
+                                Task { @MainActor in
+                                    if let value = value {
+                                        if keyboadWillShow {
+                                            keyboadWillShow = false
+                                            withAnimation(.easeOut(duration: 0.1), after: .milliseconds(60)) {
                                                 scrollToBottom(proxy: proxy)
                                             }
                                         }
+                                        scrollViewHeight = value
                                     }
-                                    scrollViewMaxY = value
                                 }
                             }
-                        }
-                        .introspect(.scrollView, on: .iOS(.v16, .v17, .v18)) { scrollView in
-                            scrollView.clipsToBounds = false
-                        }
+                            .onPreferenceChange(MaxYPreferenceKey.self) { value in
+                                Task { @MainActor in
+                                    if let value = value {
+                                        if let scrollViewMaxY = scrollViewMaxY {
+                                            let delta = scrollViewMaxY - value
+                                            if delta > 0, delta < 30 {
+                                                withAnimation(.easeOut(duration: 0.1)) {
+                                                    scrollToBottom(proxy: proxy)
+                                                }
+                                            }
+                                        }
+                                        scrollViewMaxY = value
+                                    }
+                                }
+                            }
+                            .introspect(.scrollView, on: .iOS(.v16, .v17, .v18)) { scrollView in
+                                scrollView.clipsToBounds = false
+                            }
 #endif
-                        .onTapGesture {
-                            isTextFieldFocused = false
-                        }
+                            .onTapGesture {
+                                isTextFieldFocused = false
+                            }
                     }
                     BottomInputView(
                         session: session,

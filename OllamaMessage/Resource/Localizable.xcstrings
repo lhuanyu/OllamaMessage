@@ -36,9 +36,6 @@
     "API Host" : {
       "shouldTranslate" : false
     },
-    "API Key" : {
-      "shouldTranslate" : false
-    },
     "Ask anything, or type /" : {
       "localizations" : {
         "zh-Hans" : {

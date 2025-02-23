@@ -26,7 +26,9 @@ class OllamaConfiguration: ObservableObject {
             let (data, _) = try await URLSession.shared.data(for: request)
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let models = try decoder.decode(OllamaModelResponse.self, from: data).models
+            let models = try decoder.decode(OllamaModelResponse.self, from: data).models.sorted {
+                $0.name < $1.name
+            }
             self.models = models
             if AppConfiguration.shared.model.isEmpty {
                 AppConfiguration.shared.model = models.first?.name ?? ""
@@ -50,7 +52,7 @@ struct OllamaSettingsView: View {
     var body: some View {
         List {
             Section("API") {
-                TextField("API Key", text: $apiKey)
+//                TextField("API Key", text: $apiKey)
                 TextField("API Host", text: $apiHost)
             }
             Section("Models") {
@@ -107,7 +109,9 @@ struct OllamaSettingsView: View {
             let (data, _) = try await URLSession.shared.data(for: request)
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let models = try decoder.decode(OllamaModelResponse.self, from: data).models
+            let models = try decoder.decode(OllamaModelResponse.self, from: data).models.sorted {
+                $0.name < $1.name
+            }
             withAnimation {
                 self.models = models
                 if modelName.isEmpty {
