@@ -225,6 +225,9 @@ struct MessageListView: View {
                         scrollToBottom(proxy: proxy, anchor: $0)
                     }
                 }
+                if session.conversations.isEmpty {
+                    isTextFieldFocused = true
+                }
             }
             .onChange(of: session) { session in
                 scrollToBottom(proxy: proxy)

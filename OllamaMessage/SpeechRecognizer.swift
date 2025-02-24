@@ -7,10 +7,10 @@
 
 #if os(iOS)
 
+import Accelerate
+import AVFoundation
 import Foundation
 import Speech
-import AVFoundation
-import Accelerate
 
 final class SpeechRecognizer: NSObject, ObservableObject, @unchecked Sendable {
     
@@ -22,8 +22,8 @@ final class SpeechRecognizer: NSObject, ObservableObject, @unchecked Sendable {
     private var recognitionTask: SFSpeechRecognitionTask?
     private var fftSetup: FFTSetup?
     
-    @Published var transcribedText: String = ""
-    @Published var inputVolume: Float = 0.0
+    @Published @MainActor var transcribedText: String = ""
+    @Published @MainActor var inputVolume: Float = 0.0
     
     override init() {
         super.init()
@@ -79,7 +79,11 @@ final class SpeechRecognizer: NSObject, ObservableObject, @unchecked Sendable {
             if let error {
                 print("Recognition failed: \(error.localizedDescription)")
             } else if let result = result {
-                self.transcribedText = result.bestTranscription.formattedString
+                let transcription = result.bestTranscription.formattedString
+                Task { @MainActor in
+                    self.transcribedText = transcription
+                    print("Transcription: \(transcription)")
+                }
             }
             
             if error != nil || result?.isFinal == true {

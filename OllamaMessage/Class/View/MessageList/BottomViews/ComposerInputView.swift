@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ComposerInputView: View {
     @ObservedObject var session: DialogueSession
+    @ObservedObject var recognizer = SpeechRecognizer.shared
     @FocusState var isTextFieldFocused: Bool
     let namespace: Namespace.ID
     
@@ -135,7 +136,7 @@ struct ComposerInputView: View {
     
     @ViewBuilder
     private var sendButton: some View {
-        if !session.input.isEmpty || session.inputData != nil {
+        if (!session.input.isEmpty || session.inputData != nil) && !isRecording {
             Button {
                 send(session.input)
             } label: {
@@ -161,20 +162,54 @@ struct ComposerInputView: View {
                 }
                 .offset(x: -2, y: 0)
             } else {
-                Button {} label: {
-                    Image(systemName: "mic")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 18, height: 18)
-                        .foregroundColor(.secondary)
-                        .opacity(0.7)
+                Button {
+                    if isRecording {
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        SpeechRecognizer.shared.stopRecording()
+                        isRecording = false
+                    } else {
+                        isRecording = true
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        SpeechRecognizer.shared.startRecording()
+                    }
+                } label: {
+                    if #available(iOS 17.0, *) {
+                        if isRecording {
+                            Image(systemName: "mic.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 18, height: 18)
+                                .foregroundColor(.accentColor)
+                                .opacity(1)
+                                .symbolEffect(.pulse)
+                        } else {
+                            Image(systemName: "mic")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 18, height: 18)
+                                .foregroundColor(.secondary)
+                                .opacity(0.7)
+                        }
+                    } else {
+                        Image(systemName: "mic")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 18, height: 18)
+                            .foregroundColor(.secondary)
+                            .opacity(0.7)
+                    }
                 }
                 .offset(x: -4, y: -4)
+                .onChange(of: SpeechRecognizer.shared.transcribedText) { transcribedText in
+                    session.input = transcribedText
+                }
             }
 
 #endif
         }
     }
+    
+    @State private var isRecording = false
 }
 
 struct ComposerInputView_Previews: PreviewProvider {
