@@ -78,7 +78,11 @@ class OllamaService: @unchecked Sendable {
                         images: data != nil ? [data!.base64EncodedString()] : nil
                     )
                 ],
-                options: .init(temperature: configuration.temperature)
+                system: configuration.systemPrompt,
+                options: .init(
+                    temperature: configuration.temperature,
+                    num_ctx: configuration.numCtx
+                )
             )
             
             guard let url = URL(string: AppConfiguration.shared.ollamaAPIHost + "/api/chat") else {

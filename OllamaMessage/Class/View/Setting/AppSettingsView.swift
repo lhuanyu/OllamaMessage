@@ -20,12 +20,10 @@ final class AppConfiguration: ObservableObject, @unchecked Sendable {
     @AppStorage("configuration.model") var model: String = ""
         
     @AppStorage("configuration.isReplySuggestionsEnabled") var isReplySuggestionsEnabled = true
-    
-    @AppStorage("configuration.isSmartModeEnabled") var isSmartModeEnabled = false
-    
+        
     @AppStorage("configuration.temperature") var temperature: Double = 0.8
     
-    @AppStorage("configuration.systemPrompt") var systemPrompt: String = "You are a helpful assistant"
+    @AppStorage("configuration.systemPrompt") var systemPrompt: String?
     
     @AppStorage("configuration.isMarkdownEnabled") var isMarkdownEnabled: Bool = true
     

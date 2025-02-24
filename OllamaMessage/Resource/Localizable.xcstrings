@@ -66,6 +66,16 @@
         }
       }
     },
+    "Context Size" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上下文窗口大小"
+          }
+        }
+      }
+    },
     "Copy" : {
       "localizations" : {
         "zh-Hans" : {
@@ -537,6 +547,17 @@
         }
       }
     },
+    "System Prompt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "系统提示词"
+          }
+        }
+      }
+    },
     "Temperature" : {
       "localizations" : {
         "zh-Hans" : {
@@ -553,17 +574,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "文字生成图片"
-          }
-        }
-      }
-    },
-    "Text2Image:" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "文字生成图片:"
           }
         }
       }

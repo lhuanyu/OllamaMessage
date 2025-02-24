@@ -20,9 +20,11 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         
         var model: String = ""
                 
-        var temperature: Double = 0.5
+        var temperature: Double = 0.8
         
-        var systemPrompt: String = "You are a helpful assistant"
+        var numCtx: Int = 2048
+        
+        var systemPrompt: String?
         
         init() {
             model = AppConfiguration.shared.model

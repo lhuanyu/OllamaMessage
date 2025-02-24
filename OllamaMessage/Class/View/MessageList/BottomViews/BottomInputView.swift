@@ -64,9 +64,9 @@ struct BottomInputView: View {
     
 }
 
+@available(iOS 17.0, *)
 #Preview {
-    @Namespace var namespace
-
+    @Previewable @Namespace var namespace
     VStack {
         Spacer()
         BottomInputView(session: DialogueSession(), isLoading: .constant(false),namespace: namespace, send: { _ in })

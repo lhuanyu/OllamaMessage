@@ -44,6 +44,20 @@ struct DialogueSettingsView: View {
                         }
                     }
                 }
+                Stepper(value: $configuration.numCtx, in: 512...20480, step: 512) {
+                    HStack {
+                        Text("Context Size")
+                        Spacer()
+                        Text(String(format: "%d", configuration.numCtx))
+                            .padding(.horizontal)
+                            .height(32)
+                            .background(Color.secondarySystemFill)
+                            .cornerRadius(8)
+                    }
+                }
+                HStack {
+                    TextField(LocalizedStringKey("System Prompt"), text: $configuration.systemPrompt)
+                }
             }
         }
         .task {
@@ -52,4 +66,13 @@ struct DialogueSettingsView: View {
         .navigationTitle("Settings")
     }
     
+}
+
+
+@available(iOS 17.0, *)
+#Preview {
+    
+    @Previewable @State var configuration = DialogueSession.Configuration()
+    
+    DialogueSettingsView(configuration: $configuration)
 }

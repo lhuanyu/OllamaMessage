@@ -67,10 +67,12 @@ struct OllamaChatRequest: Codable {
     let model: String
     let messages: [Message]
     var stream: Bool?
+    var system: String?
     var options: Options?
     
     struct Options: Codable {
         let temperature: Double
+        let num_ctx: Int
     }
 }
 
