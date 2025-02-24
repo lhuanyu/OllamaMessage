@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E41B8B792D6C9C0900E2325D /* OllamaModelSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8B782D6C9C0900E2325D /* OllamaModelSelectionView.swift */; };
 		E44349152D5F3A6A00A8D232 /* OllamaSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44349142D5F3A6A00A8D232 /* OllamaSettingsView.swift */; };
 		E4924EF429DC309E00B69605 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E4924EF329DC309E00B69605 /* Kingfisher */; };
 		E4924F0229DEE8CB00B69605 /* ImageMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4924F0129DEE8CB00B69605 /* ImageMessageView.swift */; };
@@ -77,6 +78,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E41B8B782D6C9C0900E2325D /* OllamaModelSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaModelSelectionView.swift; sourceTree = "<group>"; };
 		E44349142D5F3A6A00A8D232 /* OllamaSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaSettingsView.swift; sourceTree = "<group>"; };
 		E4924F0129DEE8CB00B69605 /* ImageMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMessageView.swift; sourceTree = "<group>"; };
 		E4924F0329DEE8DD00B69605 /* ImageDataMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataMessageView.swift; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 			children = (
 				E4C65EE029CA9F7800AFA884 /* DialogueSessionListView.swift */,
 				E4E99BC629D415FF00C0FCBD /* DialogueListPlaceholderView.swift */,
+				E41B8B782D6C9C0900E2325D /* OllamaModelSelectionView.swift */,
 			);
 			path = DialogueList;
 			sourceTree = "<group>";
@@ -510,6 +513,7 @@
 				E4C65F1C29D0404C00AFA884 /* DateExtensions.swift in Sources */,
 				E4E99BC729D415FF00C0FCBD /* DialogueListPlaceholderView.swift in Sources */,
 				E4C65EA229CA9E7E00AFA884 /* OllamaMessageApp.swift in Sources */,
+				E41B8B792D6C9C0900E2325D /* OllamaModelSelectionView.swift in Sources */,
 				E4D69F7B2D5F8190000A15C5 /* OllamaModel.swift in Sources */,
 				E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */,
 				E4C65EEF29CA9F7800AFA884 /* MessageListView.swift in Sources */,

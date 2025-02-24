@@ -16,10 +16,15 @@ class OllamaConfiguration: ObservableObject {
     @Published var models: [OllamaModel] = []
     @Published var version: String = ""
     
+    @Published var isFetching = false
+    
     @MainActor
     func fetchModels() async {
         guard let url = URL(string: apiHost + "/api/tags") else {
             return
+        }
+        withAnimation {
+            isFetching = true
         }
         let request = URLRequest(url: url)
         do {
@@ -36,6 +41,9 @@ class OllamaConfiguration: ObservableObject {
             print(models)
         } catch {
             print(error)
+        }
+        withAnimation {
+            isFetching = false
         }
     }
 }

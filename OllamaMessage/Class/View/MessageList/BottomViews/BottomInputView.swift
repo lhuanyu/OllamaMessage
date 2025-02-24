@@ -64,7 +64,7 @@ struct BottomInputView: View {
     
 }
 
-@available(iOS 17.0, *)
+@available(iOS 17.0, macOS 14.0, *)
 #Preview {
     @Previewable @Namespace var namespace
     VStack {

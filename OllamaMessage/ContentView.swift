@@ -41,7 +41,7 @@ struct ContentView: View {
 #endif
                     ToolbarItem(placement: .automatic) {
                         Button {
-                            addItem()
+                            showModelPicker = true
                         } label: {
                             Image(systemName: "square.and.pencil")
                         }
@@ -92,9 +92,24 @@ struct ContentView: View {
             }
         }
 #endif
+        .sheet(isPresented: $showModelPicker) {
+            OllamaModelSelectionView(selectedModelName: $selectedModelName)
+                .presentationDetents([.medium, .large])
+            
+        }
+        .onChange(of: selectedModelName) { name in
+            if let name = name {
+                addItem(modelName: name)
+            }
+        }
         .onAppear() {
             dialogueSessions = items.compactMap {
                 DialogueSession(rawData: $0)
+            }
+        }
+        .task {
+            if !OllamaConfiguration.shared.apiHost.isEmpty {
+                await OllamaConfiguration.shared.fetchModels()
             }
         }
 
@@ -118,18 +133,29 @@ struct ContentView: View {
             }
         }
     }
+    
+    
+    @State private var showModelPicker = false
+    
+    @State private var selectedModelName: String?
 
 
-    private func addItem() {
+    private func addItem(modelName: String? = nil) {
         withAnimation {
             do {
                 let session = DialogueSession()
+                if let modelName = modelName {
+                    session.configuration.model = modelName
+                }
                 dialogueSessions.insert(session, at: 0)
                 let newItem = DialogueData(context: viewContext)
                 newItem.id = session.id
                 newItem.date = session.date
                 newItem.configuration =  try JSONEncoder().encode(session.configuration)
                 try PersistenceController.shared.save()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    selectedDialogueSession = session
+                }
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.

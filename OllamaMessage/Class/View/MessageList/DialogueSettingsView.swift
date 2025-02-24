@@ -69,7 +69,7 @@ struct DialogueSettingsView: View {
 }
 
 
-@available(iOS 17.0, *)
+@available(iOS 17.0, macOS 14.0, *)
 #Preview {
     
     @Previewable @State var configuration = DialogueSession.Configuration()
