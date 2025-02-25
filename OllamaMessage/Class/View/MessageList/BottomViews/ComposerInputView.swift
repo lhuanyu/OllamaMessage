@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ComposerInputView: View {
     @ObservedObject var session: DialogueSession
+#if os(iOS)
     @ObservedObject var recognizer = SpeechRecognizer.shared
+#endif
     @FocusState var isTextFieldFocused: Bool
     let namespace: Namespace.ID
     
