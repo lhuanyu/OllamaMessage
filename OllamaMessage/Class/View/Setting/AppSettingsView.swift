@@ -5,6 +5,7 @@
 //  Created by LuoHuanyu on 2023/3/7.
 //
 
+import AcknowList
 import SwiftUI
 
 enum ChatService: String, CaseIterable {
@@ -12,7 +13,6 @@ enum ChatService: String, CaseIterable {
 }
 
 final class AppConfiguration: ObservableObject, @unchecked Sendable {
-    
     static let shared = AppConfiguration()
     
     @AppStorage("configuration.key") var key = ""
@@ -29,13 +29,10 @@ final class AppConfiguration: ObservableObject, @unchecked Sendable {
     
     @AppStorage("configuration.preferredChatService") var preferredChatService: ChatService = .ollama
     
-    
     @AppStorage("ollamaAPIHost") var ollamaAPIHost: String = ""
-
 }
 
 struct AppSettingsView: View {
-    
     @ObservedObject var configuration: AppConfiguration
     
     @State private var selectedModel = ""
@@ -99,13 +96,67 @@ struct AppSettingsView: View {
                     }
                 }
             }
+            Section {
+                /// AcknowList
+                NavigationLink {
+                    AcknowListSwiftUIView()
+                } label: {
+                    HStack {
+                        Image(systemName: "heart.fill")
+                        Text("Acknowledgements")
+                    }
+                }
+                /// Feedback
+                Button {
+                    if let url = URL(string: "mailto:lhuany@gmail.com?subject=Feedback for Ollama Message") {
+                        #if os(iOS)
+                        UIApplication.shared.open(url)
+                        #else
+                        NSWorkspace.shared.open(url)
+                        #endif
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: "envelope.fill")
+                        Text("Feedback")
+                    }
+                }
+                .foregroundColor(.primary)
+                /// AppStore Rating
+                Button {
+                    if let url = URL(string: "https://apps.apple.com/app/id6742433200?action=write-review") {
+                        #if os(iOS)
+                        UIApplication.shared.open(url)
+                        #else
+                        NSWorkspace.shared.open(url)
+                        #endif
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: "star.fill")
+                        Text("Rate on AppStore")
+                    }
+                }
+                .foregroundColor(.primary)
+                NavigationLink {
+                    AboutView()
+                } label: {
+                    HStack {
+                        Image(systemName: "info.circle")
+                        Text("About")
+                    }
+                }
+            } header: {
+                Text("")
+            } footer: {
+                Text("\(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
+            }
         }
-        .onAppear() {
+        .onAppear {
             self.selectedModel = configuration.model
         }
         .navigationTitle("Settings")
     }
-    
     
     private func updateModes(_ model: String) {
         configuration.model = model
@@ -113,6 +164,15 @@ struct AppSettingsView: View {
     }
 }
 
+extension Bundle {
+    var appVersion: String {
+        return infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+    }
+    
+    var appBuild: String {
+        return infoDictionary?["CFBundleVersion"] as? String ?? ""
+    }
+}
 
 #Preview {
     NavigationStack {

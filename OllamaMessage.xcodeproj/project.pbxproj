@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		E41B8B792D6C9C0900E2325D /* OllamaModelSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8B782D6C9C0900E2325D /* OllamaModelSelectionView.swift */; };
+		E41B8B822D6DF63700E2325D /* AcknowList in Frameworks */ = {isa = PBXBuildFile; productRef = E41B8B812D6DF63700E2325D /* AcknowList */; };
+		E41B8B842D6DF67100E2325D /* Package.resolved in Resources */ = {isa = PBXBuildFile; fileRef = E41B8B832D6DF67100E2325D /* Package.resolved */; };
+		E41B8B862D6DFDBA00E2325D /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8B852D6DFDBA00E2325D /* AboutView.swift */; };
 		E44349152D5F3A6A00A8D232 /* OllamaSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44349142D5F3A6A00A8D232 /* OllamaSettingsView.swift */; };
 		E4924EF429DC309E00B69605 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E4924EF329DC309E00B69605 /* Kingfisher */; };
 		E4924F0229DEE8CB00B69605 /* ImageMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4924F0129DEE8CB00B69605 /* ImageMessageView.swift */; };
@@ -79,6 +82,8 @@
 
 /* Begin PBXFileReference section */
 		E41B8B782D6C9C0900E2325D /* OllamaModelSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaModelSelectionView.swift; sourceTree = "<group>"; };
+		E41B8B832D6DF67100E2325D /* Package.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Package.resolved; sourceTree = "<group>"; };
+		E41B8B852D6DFDBA00E2325D /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		E44349142D5F3A6A00A8D232 /* OllamaSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaSettingsView.swift; sourceTree = "<group>"; };
 		E4924F0129DEE8CB00B69605 /* ImageMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMessageView.swift; sourceTree = "<group>"; };
 		E4924F0329DEE8DD00B69605 /* ImageDataMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataMessageView.swift; sourceTree = "<group>"; };
@@ -140,6 +145,7 @@
 				E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */,
 				E4F464EC2D657EB9001F2481 /* SwiftUIIntrospect in Frameworks */,
 				E4C65F0529CAA02800AFA884 /* SwiftUIX in Frameworks */,
+				E41B8B822D6DF63700E2325D /* AcknowList in Frameworks */,
 				E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -165,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				E4C65EDE29CA9F7800AFA884 /* AppSettingsView.swift */,
+				E41B8B852D6DFDBA00E2325D /* AboutView.swift */,
 				E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */,
 				E44349142D5F3A6A00A8D232 /* OllamaSettingsView.swift */,
 				E4E99BCF29D681A000C0FCBD /* PromptsListView.swift */,
@@ -205,6 +212,7 @@
 				E4C65EE829CA9F7800AFA884 /* Resource */,
 				E4C65EAC29CA9E7F00AFA884 /* OllamaMessage.entitlements */,
 				E4C65EA529CA9E7E00AFA884 /* OllamaMessage.xcdatamodeld */,
+				E41B8B832D6DF67100E2325D /* Package.resolved */,
 				E4C65EAD29CA9E7F00AFA884 /* Preview Content */,
 			);
 			path = OllamaMessage;
@@ -384,6 +392,7 @@
 				E4E99BCB29D5D58700C0FCBD /* SwiftCSV */,
 				E4924EF329DC309E00B69605 /* Kingfisher */,
 				E4F464EB2D657EB9001F2481 /* SwiftUIIntrospect */,
+				E41B8B812D6DF63700E2325D /* AcknowList */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* OllamaMessage.app */;
@@ -465,6 +474,7 @@
 				E4E99BCA29D5D58700C0FCBD /* XCRemoteSwiftPackageReference "SwiftCSV" */,
 				E4924EF229DC309E00B69605 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				E4F464EA2D657EB9001F2481 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+				E41B8B802D6DF63700E2325D /* XCRemoteSwiftPackageReference "AcknowList" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -483,6 +493,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4C65EFD29CA9F7800AFA884 /* chatgpt_prompts.json in Resources */,
+				E41B8B842D6DF67100E2325D /* Package.resolved in Resources */,
 				E4F464E92D65550D001F2481 /* Localizable.xcstrings in Resources */,
 				E4C65EAF29CA9E7F00AFA884 /* Preview Assets.xcassets in Resources */,
 				E4C65EAB29CA9E7F00AFA884 /* Assets.xcassets in Resources */,
@@ -514,6 +525,7 @@
 				E4E99BC729D415FF00C0FCBD /* DialogueListPlaceholderView.swift in Sources */,
 				E4C65EA229CA9E7E00AFA884 /* OllamaMessageApp.swift in Sources */,
 				E41B8B792D6C9C0900E2325D /* OllamaModelSelectionView.swift in Sources */,
+				E41B8B862D6DFDBA00E2325D /* AboutView.swift in Sources */,
 				E4D69F7B2D5F8190000A15C5 /* OllamaModel.swift in Sources */,
 				E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */,
 				E4C65EEF29CA9F7800AFA884 /* MessageListView.swift in Sources */,
@@ -739,7 +751,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.luohuanyu.ollama;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -782,7 +794,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.luohuanyu.ollama;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -925,6 +937,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		E41B8B802D6DF63700E2325D /* XCRemoteSwiftPackageReference "AcknowList" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vtourraine/AcknowList";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.3.0;
+			};
+		};
 		E4924EF229DC309E00B69605 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -976,6 +996,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E41B8B812D6DF63700E2325D /* AcknowList */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E41B8B802D6DF63700E2325D /* XCRemoteSwiftPackageReference "AcknowList" */;
+			productName = AcknowList;
+		};
 		E4924EF329DC309E00B69605 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E4924EF229DC309E00B69605 /* XCRemoteSwiftPackageReference "Kingfisher" */;
