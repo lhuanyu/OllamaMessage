@@ -29,6 +29,10 @@ struct OllamaModelSelectionView: View {
                             .scaledToFit()
                         Text(model.name)
                         Spacer()
+                        if model.name.ollamaModelProvider.isVisionModel {
+                            Image(systemName: "eye")
+                                .foregroundColor(.accentColor)
+                        }
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {

@@ -42,6 +42,7 @@ struct LeadingComposerView: View {
                     .frame(height: height)
                     .foregroundColor(.gray)
             }
+            .disabled(!session.configuration.ollamaModelProvider.isVisionModel)
         }
         .macButtonStyle()
         .padding(.horizontal, 8)

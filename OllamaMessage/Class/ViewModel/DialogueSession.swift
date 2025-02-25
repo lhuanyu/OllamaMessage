@@ -19,6 +19,10 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         }
         
         var model: String = ""
+        
+        var ollamaModelProvider: OllamaModelProvider {
+            model.ollamaModelProvider
+        }
                 
         var temperature: Double = 0.8
         

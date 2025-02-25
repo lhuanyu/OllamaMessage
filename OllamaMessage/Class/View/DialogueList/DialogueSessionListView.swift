@@ -135,7 +135,7 @@ struct DialogueSessionListView: View {
         .onAppear(perform: sortList)
 #if os(iOS)
         .listStyle(.plain)
-        .navigationTitle(Text("OllamaMessage"))
+        .navigationTitle(Text("Ollama Message"))
 #else
         .frame(minWidth: 300)
 #endif

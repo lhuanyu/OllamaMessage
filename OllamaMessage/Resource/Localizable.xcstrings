@@ -338,15 +338,11 @@
     "Ollama API Host" : {
       "shouldTranslate" : false
     },
+    "Ollama Message" : {
+      "shouldTranslate" : false
+    },
     "OllamaMessage" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OllamaMessage"
-          }
-        }
-      }
+      "shouldTranslate" : false
     },
     "OllamaMessage will classify your prompt and then select the most appropriate model to handle it." : {
       "extractionState" : "manual",
