@@ -40,7 +40,6 @@ struct LeadingComposerView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(height: height)
-                    .foregroundColor(.gray)
             }
             .disabled(!session.configuration.ollamaModelProvider.isVisionModel)
         }

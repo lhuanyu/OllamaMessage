@@ -66,10 +66,18 @@ struct ComposerInputView: View {
         .padding([.trailing])
     }
     
+    private var textFieldHint: LocalizedStringKey {
+        if isRecording {
+            return "Speech Reconginizing..."
+        } else {
+            return "Ask anything, or type /"
+        }
+    }
+    
     @ViewBuilder
     private var textField: some View {
         if session.inputData == nil {
-            TextField("Ask anything, or type /", text: $session.input, axis: .vertical)
+            TextField(textFieldHint, text: $session.input, axis: .vertical)
                 .focused($isTextFieldFocused)
                 .multilineTextAlignment(.leading)
                 .lineLimit(1...20)
@@ -193,12 +201,22 @@ struct ComposerInputView: View {
                                 .opacity(0.7)
                         }
                     } else {
-                        Image(systemName: "mic")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 18, height: 18)
-                            .foregroundColor(.secondary)
-                            .opacity(0.7)
+                        if isRecording {
+                            Image(systemName: "mic")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 18, height: 18)
+                                .foregroundColor(.accentColor)
+                                .opacity(1)
+                                .pulse()
+                        } else {
+                            Image(systemName: "mic")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 18, height: 18)
+                                .foregroundColor(.secondary)
+                                .opacity(0.7)
+                        }
                     }
                 }
                 .offset(x: -4, y: -4)

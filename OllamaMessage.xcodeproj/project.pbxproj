@@ -11,6 +11,7 @@
 		E41B8B822D6DF63700E2325D /* AcknowList in Frameworks */ = {isa = PBXBuildFile; productRef = E41B8B812D6DF63700E2325D /* AcknowList */; };
 		E41B8B842D6DF67100E2325D /* Package.resolved in Resources */ = {isa = PBXBuildFile; fileRef = E41B8B832D6DF67100E2325D /* Package.resolved */; };
 		E41B8B862D6DFDBA00E2325D /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8B852D6DFDBA00E2325D /* AboutView.swift */; };
+		E41B8B882D6EBCA700E2325D /* PulseEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8B872D6EBCA700E2325D /* PulseEffect.swift */; };
 		E44349152D5F3A6A00A8D232 /* OllamaSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44349142D5F3A6A00A8D232 /* OllamaSettingsView.swift */; };
 		E4924EF429DC309E00B69605 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E4924EF329DC309E00B69605 /* Kingfisher */; };
 		E4924F0229DEE8CB00B69605 /* ImageMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4924F0129DEE8CB00B69605 /* ImageMessageView.swift */; };
@@ -84,6 +85,7 @@
 		E41B8B782D6C9C0900E2325D /* OllamaModelSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaModelSelectionView.swift; sourceTree = "<group>"; };
 		E41B8B832D6DF67100E2325D /* Package.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Package.resolved; sourceTree = "<group>"; };
 		E41B8B852D6DFDBA00E2325D /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		E41B8B872D6EBCA700E2325D /* PulseEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseEffect.swift; sourceTree = "<group>"; };
 		E44349142D5F3A6A00A8D232 /* OllamaSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaSettingsView.swift; sourceTree = "<group>"; };
 		E4924F0129DEE8CB00B69605 /* ImageMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMessageView.swift; sourceTree = "<group>"; };
 		E4924F0329DEE8DD00B69605 /* ImageDataMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataMessageView.swift; sourceTree = "<group>"; };
@@ -337,6 +339,7 @@
 				E4C65EEC29CA9F7800AFA884 /* KeyboardPublisher.swift */,
 				E4C65F1B29D0404B00AFA884 /* DateExtensions.swift */,
 				E4994DEC29D9C923002981D0 /* ScrollViewDidScrollViewModifier.swift */,
+				E41B8B872D6EBCA700E2325D /* PulseEffect.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -539,6 +542,7 @@
 				E4BB55482D648EF600C5C3ED /* AIProvider.swift in Sources */,
 				E4C65EFB29CA9F7800AFA884 /* Prompt.swift in Sources */,
 				E4C65EA929CA9E7E00AFA884 /* ContentView.swift in Sources */,
+				E41B8B882D6EBCA700E2325D /* PulseEffect.swift in Sources */,
 				E4C65F1829CBEE2400AFA884 /* BottomInputView.swift in Sources */,
 				E4C65EFF29CA9F7800AFA884 /* KeyboardPublisher.swift in Sources */,
 				E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */,
@@ -728,7 +732,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = OllamaMessage/OllamaMessage.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"OllamaMessage/Preview Content\"";
 				DEVELOPMENT_TEAM = 2WRET6WW2J;
@@ -771,7 +775,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = OllamaMessage/OllamaMessage.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"OllamaMessage/Preview Content\"";
 				DEVELOPMENT_TEAM = 2WRET6WW2J;
