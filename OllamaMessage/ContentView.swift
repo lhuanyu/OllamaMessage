@@ -45,7 +45,6 @@ struct ContentView: View {
                         } label: {
                             Image(systemName: "square.and.pencil")
                         }
-                        .disabled(configuration.ollamaAPIHost.isEmpty || configuration.model.isEmpty)
                     }
                 }
         } detail: {

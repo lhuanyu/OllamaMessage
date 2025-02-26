@@ -283,6 +283,17 @@
         }
       }
     },
+    "Microphone Permission" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "麦克风权限"
+          }
+        }
+      }
+    },
     "Model" : {
       "localizations" : {
         "zh-Hans" : {
@@ -440,6 +451,28 @@
         }
       }
     },
+    "Please enable microphone permission in the Settings app." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请在设置中开启麦克风权限。"
+          }
+        }
+      }
+    },
+    "Please enable speech recognition permission in the Settings app." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请在设置中开启语音识别权限。"
+          }
+        }
+      }
+    },
     "Prompt" : {
       "localizations" : {
         "zh-Hans" : {
@@ -570,6 +603,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "源网址"
+          }
+        }
+      }
+    },
+    "Speech Recognition Permission" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "语音识别权限"
           }
         }
       }

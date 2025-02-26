@@ -178,9 +178,11 @@ struct ComposerInputView: View {
                         SpeechRecognizer.shared.stopRecording()
                         isRecording = false
                     } else {
-                        isRecording = true
                         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                        SpeechRecognizer.shared.startRecording()
+                        let recordingStarted = SpeechRecognizer.shared.startRecording()
+                        if recordingStarted {
+                            isRecording = true
+                        }
                     }
                 } label: {
                     if #available(iOS 17.0, *) {

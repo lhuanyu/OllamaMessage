@@ -6,7 +6,7 @@
 //
 
 #if os(iOS)
-
+import UIKit
 import Accelerate
 import AVFoundation
 import Foundation
@@ -28,7 +28,10 @@ final class SpeechRecognizer: NSObject, ObservableObject, @unchecked Sendable {
     override init() {
         super.init()
         requestAuthorization()
+        requestMicrophonePermission()
     }
+    
+    @Published var authorizationStatus: SFSpeechRecognizerAuthorizationStatus = .notDetermined
     
     private func requestAuthorization() {
         SFSpeechRecognizer.requestAuthorization { status in
@@ -45,11 +48,80 @@ final class SpeechRecognizer: NSObject, ObservableObject, @unchecked Sendable {
                 @unknown default:
                     fatalError("Unknown authorization status")
                 }
+                self.authorizationStatus = status
             }
         }
     }
     
-    func startRecording() {
+    @Published var isRecordPermissionGranted: Bool = false
+    
+    private func checkMicrophonePermission() {
+        switch AVAudioSession.sharedInstance().recordPermission {
+        case .granted:
+            print("Microphone access granted")
+        case .denied:
+            print("Microphone access denied")
+        case .undetermined:
+            print("Microphone permission undetermined")
+            requestMicrophonePermission()
+        @unknown default:
+            print("Unknown microphone permission state")
+        }
+    }
+
+    func requestMicrophonePermission() {
+        AVAudioSession.sharedInstance().requestRecordPermission { granted in
+            if granted {
+                print("Microphone access granted after request")
+            } else {
+                print("Microphone access denied after request")
+            }
+            DispatchQueue.main.async {
+                self.isRecordPermissionGranted = granted
+            }
+        }
+    }
+    
+    @MainActor
+    func showMicrophonePermissionAlert() {
+        let alertController = UIAlertController(title: "Microphone Permission".localized, message: "Please enable microphone permission in the Settings app.".localized, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Settings".localized, style: .default, handler: { _ in
+            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsURL)
+            }
+        }))
+        UIWindow.key?.rootViewController?.present(alertController, animated: true, completion: nil)
+    }
+    
+    @MainActor
+    func showSpeechRecognitionPermissionAlert() {
+        let alertController = UIAlertController(title: "Speech Recognition Permission".localized, message: "Please enable speech recognition permission in the Settings app.".localized, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Settings".localized, style: .default, handler: { _ in
+            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsURL)
+            }
+        }))
+        UIWindow.key?.rootViewController?.present(alertController, animated: true, completion: nil)
+    }
+    
+    @discardableResult
+    func startRecording() -> Bool {
+        if authorizationStatus != .authorized {
+            Task { @MainActor in
+                showSpeechRecognitionPermissionAlert()
+            }
+            return false
+        }
+        
+        if !isRecordPermissionGranted {
+            Task { @MainActor in
+                showMicrophonePermissionAlert()
+            }
+            return false
+        }
+        
         if recognitionTask != nil {
             recognitionTask?.cancel()
             recognitionTask = nil
@@ -62,7 +134,7 @@ final class SpeechRecognizer: NSObject, ObservableObject, @unchecked Sendable {
             try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
         } catch {
             print("Unable to activate audio session: \(error.localizedDescription)")
-            return
+            return false
         }
         
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
@@ -107,8 +179,10 @@ final class SpeechRecognizer: NSObject, ObservableObject, @unchecked Sendable {
         
         do {
             try audioEngine.start()
+            return true
         } catch {
             print("Unable to start audio engine: \(error.localizedDescription)")
+            return false
         }
     }
     
@@ -131,6 +205,23 @@ final class SpeechRecognizer: NSObject, ObservableObject, @unchecked Sendable {
         DispatchQueue.main.async {
             self.inputVolume = max(0, db + 80) / 80
         }
+    }
+}
+
+extension UIWindow {
+    static var key: UIWindow? {
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            if let keyWindow = windowScene.windows.first(where: { $0.isKeyWindow }) {
+                return keyWindow
+            }
+        }
+        return nil
+    }
+}
+
+extension String {
+    var localized: String {
+        return NSLocalizedString(self, comment: "")
     }
 }
 
