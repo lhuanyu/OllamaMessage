@@ -15,37 +15,6 @@ struct BubbleShape: Shape {
         let width = rect.width
         let height = rect.height
         
-#if os(macOS)
-        let bezierPath = NSBezierPath()
-        if !myMessage {
-            bezierPath.move(to: CGPoint(x: 20, y: height))
-            bezierPath.line(to: CGPoint(x: width - 15, y: height))
-            bezierPath.curve(to: CGPoint(x: width, y: height - 15), controlPoint1: CGPoint(x: width - 8, y: height), controlPoint2: CGPoint(x: width, y: height - 8))
-            bezierPath.line(to: CGPoint(x: width, y: 15))
-            bezierPath.curve(to: CGPoint(x: width - 15, y: 0), controlPoint1: CGPoint(x: width, y: 8), controlPoint2: CGPoint(x: width - 8, y: 0))
-            bezierPath.line(to: CGPoint(x: 20, y: 0))
-            bezierPath.curve(to: CGPoint(x: 5, y: 15), controlPoint1: CGPoint(x: 12, y: 0), controlPoint2: CGPoint(x: 5, y: 8))
-            bezierPath.line(to: CGPoint(x: 5, y: height - 10))
-            bezierPath.curve(to: CGPoint(x: 0, y: height), controlPoint1: CGPoint(x: 5, y: height - 1), controlPoint2: CGPoint(x: 0, y: height))
-            bezierPath.line(to: CGPoint(x: -1, y: height))
-            bezierPath.curve(to: CGPoint(x: 12, y: height - 4), controlPoint1: CGPoint(x: 4, y: height + 1), controlPoint2: CGPoint(x: 8, y: height - 1))
-            bezierPath.curve(to: CGPoint(x: 20, y: height), controlPoint1: CGPoint(x: 15, y: height), controlPoint2: CGPoint(x: 20, y: height))
-        } else {
-            bezierPath.move(to: CGPoint(x: width - 20, y: height))
-            bezierPath.line(to: CGPoint(x: 15, y: height))
-            bezierPath.curve(to: CGPoint(x: 0, y: height - 15), controlPoint1: CGPoint(x: 8, y: height), controlPoint2: CGPoint(x: 0, y: height - 8))
-            bezierPath.line(to: CGPoint(x: 0, y: 15))
-            bezierPath.curve(to: CGPoint(x: 15, y: 0), controlPoint1: CGPoint(x: 0, y: 8), controlPoint2: CGPoint(x: 8, y: 0))
-            bezierPath.line(to: CGPoint(x: width - 20, y: 0))
-            bezierPath.curve(to: CGPoint(x: width - 5, y: 15), controlPoint1: CGPoint(x: width - 12, y: 0), controlPoint2: CGPoint(x: width - 5, y: 8))
-            bezierPath.line(to: CGPoint(x: width - 5, y: height - 12))
-            bezierPath.curve(to: CGPoint(x: width, y: height), controlPoint1: CGPoint(x: width - 5, y: height - 1), controlPoint2: CGPoint(x: width, y: height))
-            bezierPath.line(to: CGPoint(x: width + 1, y: height))
-            bezierPath.curve(to: CGPoint(x: width - 12, y: height - 4), controlPoint1: CGPoint(x: width - 4, y: height + 1), controlPoint2: CGPoint(x: width - 8, y: height - 1))
-            bezierPath.curve(to: CGPoint(x: width - 20, y: height), controlPoint1: CGPoint(x: width - 15, y: height), controlPoint2: CGPoint(x: width - 20, y: height))
-        }
-        return Path(bezierPath.cgPath)
-#else
         let bezierPath = UIBezierPath()
         if !myMessage {
             bezierPath.move(to: CGPoint(x: 20, y: height))
@@ -75,36 +44,9 @@ struct BubbleShape: Shape {
             bezierPath.addCurve(to: CGPoint(x: width - 20, y: height), controlPoint1: CGPoint(x: width - 15, y: height), controlPoint2: CGPoint(x: width - 20, y: height))
         }
         return Path(bezierPath.cgPath)
-#endif
         
     }
 }
-
-#if os(macOS)
-extension NSBezierPath {
-    
-    var cgPath: CGPath {
-        let path = CGMutablePath()
-        var points = [CGPoint](repeating: .zero, count: 3)
-        for i in 0 ..< self.elementCount {
-            let type = self.element(at: i, associatedPoints: &points)
-            switch type {
-            case .moveTo: path.move(to: points[0])
-            case .lineTo: path.addLine(to: points[0])
-            case .curveTo: path.addCurve(to: points[2], control1: points[0], control2: points[1])
-            case .closePath: path.closeSubpath()
-            case .cubicCurveTo:
-                break
-            case .quadraticCurveTo:
-                break
-            @unknown default: fatalError("Unknown element \(type)")
-            }
-        }
-        return path
-    }
-    
-}
-#endif
 
 extension View {
     func bubbleStyle(isMyMessage: Bool, type: MessageType = .text) -> some View {
@@ -126,9 +68,7 @@ struct Bubble: ViewModifier {
                     .padding([.leading, .trailing])
                     .padding(.vertical, 4)
                     .background(Color(.systemBlue))
-#if os(iOS)
                     .contentShape(.contextMenuPreview, BubbleShape(myMessage: true))
-#endif
                     .clipShape(BubbleShape(myMessage: true))
                     .foregroundColor(.white)
             } else {
@@ -136,9 +76,7 @@ struct Bubble: ViewModifier {
                     .padding([.leading, .trailing])
                     .padding(.vertical, 4)
                     .background(replyBackgroundColor)
-#if os(iOS)
                     .contentShape(.contextMenuPreview, BubbleShape(myMessage: false))
-#endif
                     .clipShape(BubbleShape(myMessage: false))
                     .foregroundColor(.primary)
             }
@@ -146,17 +84,13 @@ struct Bubble: ViewModifier {
             if isMyMessage {
                 content
                     .background(.clear)
-#if os(iOS)
                     .contentShape(.contextMenuPreview, BubbleShape(myMessage: true))
-#endif
                     .clipShape(BubbleShape(myMessage: true))
                     .foregroundColor(.white)
             } else {
                 content
                     .background(replyBackgroundColor)
-#if os(iOS)
                     .contentShape(.contextMenuPreview, BubbleShape(myMessage: false))
-#endif
                     .clipShape(BubbleShape(myMessage: false))
                     .foregroundColor(.primary)
             }

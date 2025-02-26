@@ -51,19 +51,6 @@ struct AppSettingsView: View {
                     Toggle("Markdown Enabled", isOn: $configuration.isMarkdownEnabled)
                     Spacer()
                 }
-                
-                HStack {
-                    Image(systemName: "bubble.left.and.bubble.right.fill")
-                    Text("Model Provider")
-                        .fixedSize()
-                    Spacer()
-                    Picker("Text2Image", selection: configuration.$preferredChatService) {
-                        ForEach(ChatService.allCases, id: \.self) { service in
-                            Text(service.rawValue.capitalizingFirstLetter())
-                        }
-                    }
-                    .labelsHidden()
-                }
             }
             Section("Model") {
                 NavigationLink {
@@ -109,11 +96,7 @@ struct AppSettingsView: View {
                 /// Feedback
                 Button {
                     if let url = URL(string: "mailto:lhuany@gmail.com?subject=Feedback for Ollama Message") {
-                        #if os(iOS)
                         UIApplication.shared.open(url)
-                        #else
-                        NSWorkspace.shared.open(url)
-                        #endif
                     }
                 } label: {
                     HStack {
@@ -125,11 +108,7 @@ struct AppSettingsView: View {
                 /// AppStore Rating
                 Button {
                     if let url = URL(string: "https://apps.apple.com/app/id6742433200?action=write-review") {
-                        #if os(iOS)
                         UIApplication.shared.open(url)
-                        #else
-                        NSWorkspace.shared.open(url)
-                        #endif
                     }
                 } label: {
                     HStack {

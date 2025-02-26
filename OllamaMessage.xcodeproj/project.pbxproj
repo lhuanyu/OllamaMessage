@@ -20,7 +20,6 @@
 		E4924F0829DEEC0800B69605 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4924F0729DEEC0800B69605 /* ErrorMessageView.swift */; };
 		E4994DEB29D6E655002981D0 /* CustomPromptsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DEA29D6E655002981D0 /* CustomPromptsView.swift */; };
 		E4994DED29D9C923002981D0 /* ScrollViewDidScrollViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DEC29D9C923002981D0 /* ScrollViewDidScrollViewModifier.swift */; };
-		E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */; };
 		E4B213102D697616000DFF14 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B2130F2D697616000DFF14 /* SpeechRecognizer.swift */; };
 		E4BB55482D648EF600C5C3ED /* AIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BB55472D648EF600C5C3ED /* AIProvider.swift */; };
 		E4C65EA229CA9E7E00AFA884 /* OllamaMessageApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EA129CA9E7E00AFA884 /* OllamaMessageApp.swift */; };
@@ -57,7 +56,6 @@
 		E4D69F7B2D5F8190000A15C5 /* OllamaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D69F7A2D5F8190000A15C5 /* OllamaModel.swift */; };
 		E4D69F7E2D5F86F7000A15C5 /* OllamaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D69F7D2D5F86F7000A15C5 /* OllamaService.swift */; };
 		E4E99BC729D415FF00C0FCBD /* DialogueListPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E99BC629D415FF00C0FCBD /* DialogueListPlaceholderView.swift */; };
-		E4E99BC929D5AF9F00C0FCBD /* ToolTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E99BC829D5AF9F00C0FCBD /* ToolTipView.swift */; };
 		E4E99BCC29D5D58700C0FCBD /* SwiftCSV in Frameworks */ = {isa = PBXBuildFile; productRef = E4E99BCB29D5D58700C0FCBD /* SwiftCSV */; };
 		E4E99BD029D681A000C0FCBD /* PromptsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E99BCF29D681A000C0FCBD /* PromptsListView.swift */; };
 		E4F464E92D65550D001F2481 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E4F464E82D65550D001F2481 /* Localizable.xcstrings */; };
@@ -93,7 +91,6 @@
 		E4924F0729DEEC0800B69605 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		E4994DEA29D6E655002981D0 /* CustomPromptsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPromptsView.swift; sourceTree = "<group>"; };
 		E4994DEC29D9C923002981D0 /* ScrollViewDidScrollViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewDidScrollViewModifier.swift; sourceTree = "<group>"; };
-		E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSSettingsView.swift; sourceTree = "<group>"; };
 		E4B2130F2D697616000DFF14 /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		E4BB55472D648EF600C5C3ED /* AIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvider.swift; sourceTree = "<group>"; };
 		E4C65E9E29CA9E7E00AFA884 /* OllamaMessage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OllamaMessage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -131,7 +128,6 @@
 		E4D69F7A2D5F8190000A15C5 /* OllamaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaModel.swift; sourceTree = "<group>"; };
 		E4D69F7D2D5F86F7000A15C5 /* OllamaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaService.swift; sourceTree = "<group>"; };
 		E4E99BC629D415FF00C0FCBD /* DialogueListPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueListPlaceholderView.swift; sourceTree = "<group>"; };
-		E4E99BC829D5AF9F00C0FCBD /* ToolTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolTipView.swift; sourceTree = "<group>"; };
 		E4E99BCF29D681A000C0FCBD /* PromptsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptsListView.swift; sourceTree = "<group>"; };
 		E4EF056C2A3B3744005CF741 /* OllamaMessage-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OllamaMessage-Info.plist"; sourceTree = "<group>"; };
 		E4F464E82D65550D001F2481 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -174,7 +170,6 @@
 			children = (
 				E4C65EDE29CA9F7800AFA884 /* AppSettingsView.swift */,
 				E41B8B852D6DFDBA00E2325D /* AboutView.swift */,
-				E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */,
 				E44349142D5F3A6A00A8D232 /* OllamaSettingsView.swift */,
 				E4E99BCF29D681A000C0FCBD /* PromptsListView.swift */,
 				E4994DEA29D6E655002981D0 /* CustomPromptsView.swift */,
@@ -348,7 +343,6 @@
 			isa = PBXGroup;
 			children = (
 				E4C65EDB29CA9F7800AFA884 /* ReplyingIndicatorView.swift */,
-				E4E99BC829D5AF9F00C0FCBD /* ToolTipView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -530,7 +524,6 @@
 				E41B8B792D6C9C0900E2325D /* OllamaModelSelectionView.swift in Sources */,
 				E41B8B862D6DFDBA00E2325D /* AboutView.swift in Sources */,
 				E4D69F7B2D5F8190000A15C5 /* OllamaModel.swift in Sources */,
-				E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */,
 				E4C65EEF29CA9F7800AFA884 /* MessageListView.swift in Sources */,
 				E4C65F2029D0649800AFA884 /* DialogueSettingsView.swift in Sources */,
 				E4994DEB29D6E655002981D0 /* CustomPromptsView.swift in Sources */,
@@ -547,7 +540,6 @@
 				E4C65EFF29CA9F7800AFA884 /* KeyboardPublisher.swift in Sources */,
 				E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */,
 				E4C65EF729CA9F7800AFA884 /* DialogueSessionListView.swift in Sources */,
-				E4E99BC929D5AF9F00C0FCBD /* ToolTipView.swift in Sources */,
 				E44349152D5F3A6A00A8D232 /* OllamaSettingsView.swift in Sources */,
 				E4C65EF329CA9F7800AFA884 /* ReplyingIndicatorView.swift in Sources */,
 				E4C65EED29CA9F7800AFA884 /* DialogueSession.swift in Sources */,
@@ -761,7 +753,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.luohuanyu.ollama;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -804,7 +797,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.luohuanyu.ollama;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -826,7 +820,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.luohuanyu.ChatGPTTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -849,7 +844,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.luohuanyu.ChatGPTTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -871,7 +867,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.luohuanyu.ChatGPTUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -893,7 +890,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.luohuanyu.ChatGPTUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -963,8 +961,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.4;
+				branch = master;
+				kind = branch;
 			};
 		};
 		E4C65F0C29CAA06600AFA884 /* XCRemoteSwiftPackageReference "Splash" */ = {

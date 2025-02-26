@@ -22,12 +22,7 @@ enum OllamaModelProvider: String {
     case unknown
 
     var iconURL: URL? {
-        let styleName: String
-        #if os(iOS)
-        styleName = UITraitCollection.current.userInterfaceStyle.styleName
-        #else
-        styleName = "light"
-        #endif
+        let styleName = UITraitCollection.current.userInterfaceStyle.styleName
         switch self {
         case .phi:
             return URL(string: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/\(styleName)/microsoft-color.png")
@@ -50,7 +45,6 @@ enum OllamaModelProvider: String {
     }
 }
 
-#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 import UIKit
 
 extension UIUserInterfaceStyle {
@@ -58,7 +52,6 @@ extension UIUserInterfaceStyle {
         return self == .dark ? "dark" : "light"
     }
 }
-#endif
 
 extension String {
     var ollamaModelProvider: OllamaModelProvider {

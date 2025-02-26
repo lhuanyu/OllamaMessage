@@ -9,28 +9,19 @@ import SwiftUI
 
 struct ComposerInputView: View {
     @ObservedObject var session: DialogueSession
-#if os(iOS)
     @ObservedObject var recognizer = SpeechRecognizer.shared
-#endif
     @FocusState var isTextFieldFocused: Bool
+    
     let namespace: Namespace.ID
     
     var send: (String) -> Void
     
     private var size: CGFloat {
-#if os(macOS)
-        24
-#else
         26
-#endif
     }
     
     var radius: CGFloat {
-#if os(macOS)
-        16
-#else
         17
-#endif
     }
     
     var body: some View {
@@ -47,16 +38,12 @@ struct ComposerInputView: View {
                         .lineLimit(1...1)
                         .padding(.leading, 12)
                         .padding(.trailing, size + 6)
-#if os(macOS)
-                        .textFieldStyle(.plain)
-#endif
                 }
             } else if session.isSending {
                 animationTextView
             }
             sendButton
         }
-        .macButtonStyle()
         .padding(4)
         .overlay(
             RoundedRectangle(cornerRadius: radius, style: .continuous)
@@ -84,9 +71,6 @@ struct ComposerInputView: View {
                 .padding(.leading, 12)
                 .padding(.trailing, size + 6)
                 .frame(minHeight: size)
-#if os(macOS)
-                .textFieldStyle(.plain)
-#endif
         } else {
             EmptyView()
         }
@@ -119,13 +103,8 @@ struct ComposerInputView: View {
                 } label: {
                     ZStack {
                         Color.white
-#if os(macOS)
-                            .frame(width: 16, height: 16)
-                            .cornerRadius(8)
-#else
                             .frame(width: 20, height: 20)
                             .cornerRadius(10)
-#endif
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.systemGray)
                     }
@@ -159,7 +138,6 @@ struct ComposerInputView: View {
             }
             .keyboardShortcut(.defaultAction)
         } else {
-#if os(iOS)
             if session.isStreaming {
                 Button {
                     session.stopStreaming()
@@ -226,8 +204,6 @@ struct ComposerInputView: View {
                     session.input = transcribedText
                 }
             }
-
-#endif
         }
     }
     

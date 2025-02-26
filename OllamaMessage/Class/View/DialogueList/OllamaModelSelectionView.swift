@@ -41,35 +41,30 @@ struct OllamaModelSelectionView: View {
                     }
                 }
             }
-            #if os(macOS)
-            .frame(minHeight: 300)
-            #endif
             .task {
                 await OllamaConfiguration.shared.fetchModels()
             }
             .navigationTitle("Model")
-            #if os(iOS)
-                .navigationBarTitleDisplayMode(.inline)
-            #endif
-                .toolbar {
-                    ToolbarItem(placement: .automatic) {
-                        Button {
-                            presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            Text("Done")
-                                .bold()
-                        }
-                    }
-                    ToolbarItem(placement: .automatic) {
-                        Button {
-                            Task {
-                                await OllamaConfiguration.shared.fetchModels()
-                            }
-                        } label: {
-                            Image(systemName: "arrow.clockwise")
-                        }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Text("Done")
+                            .bold()
                     }
                 }
+                ToolbarItem(placement: .automatic) {
+                    Button {
+                        Task {
+                            await OllamaConfiguration.shared.fetchModels()
+                        }
+                    } label: {
+                        Image(systemName: "arrow.clockwise")
+                    }
+                }
+            }
         }
     }
 }

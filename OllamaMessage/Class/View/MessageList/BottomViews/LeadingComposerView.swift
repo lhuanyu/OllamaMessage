@@ -24,11 +24,7 @@ struct LeadingComposerView: View {
 
     
     private var height: CGFloat {
-#if os(iOS)
         22
-#else
-        17
-#endif
     }
     
     var body: some View {
@@ -43,7 +39,6 @@ struct LeadingComposerView: View {
             }
             .disabled(!session.configuration.ollamaModelProvider.isVisionModel)
         }
-        .macButtonStyle()
         .padding(.horizontal, 8)
         .frame(maxHeight: 32)
         .photosPicker(isPresented: $showPhotoPicker, selection: $imageSelection, matching: .images)
@@ -105,35 +100,3 @@ struct LeadingComposerView_Previews: PreviewProvider {
             .previewLayout(.fixed(width: 400.0, height: 100.0))
     }
 }
-
-extension View {
-    func macButtonStyle() -> some View {
-        modifier(MacButtonModifier())
-    }
-}
-
-struct MacButtonModifier: ViewModifier {
-    
-    func body(content: Content) -> some View {
-#if os(macOS)
-        content
-            .buttonStyle(.borderless)
-#else
-        content
-#endif
-    }
-}
-
-
-struct MacTextFieldModifier: ViewModifier {
-    
-    func body(content: Content) -> some View {
-#if os(macOS)
-        content
-            .buttonStyle(.borderless)
-#else
-        content
-#endif
-    }
-}
-

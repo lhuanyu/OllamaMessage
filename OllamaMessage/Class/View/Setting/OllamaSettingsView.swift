@@ -98,9 +98,7 @@ struct OllamaSettingsView: View {
                 await fetchModels()
             }
         }
-        #if os(iOS)
         .navigationBarTitle("Ollama")
-        #endif
     }
     
     @State private var isFetching = true

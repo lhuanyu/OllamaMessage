@@ -5,33 +5,30 @@
 //  Created by LuoHuanyu on 2023/3/17.
 //
 
-import SwiftUI
 import Kingfisher
+import SwiftUI
+import SwiftUIX
 
 struct DialogueSessionListView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    
-#if os(iOS)
+
     @Environment(\.verticalSizeClass) var verticalSizeClass
 
     private var shouldShowIcon: Bool {
         verticalSizeClass != .compact
     }
-#endif
-
 
     @Binding var dialogueSessions: [DialogueSession]
     @Binding var selectedDialogueSession: DialogueSession?
-    
+
     @Binding var isReplying: Bool
-    
+
     var deleteHandler: (IndexSet) -> Void
     var deleteDialogueHandler: (DialogueSession) -> Void
 
     var body: some View {
         List(selection: $selectedDialogueSession) {
             ForEach(dialogueSessions) { session in
-#if os(iOS)
                 HStack {
                     if shouldShowIcon {
                         KFImage.url(session.configuration.model.ollamaModelProvider.iconURL)
@@ -49,13 +46,13 @@ struct DialogueSessionListView: View {
                                 Spacer()
                                 Text(session.date.dialogueDesc)
                                     .font(Font.system(.subheadline))
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(secondaryTextColor(session))
                             }
                         }
                         HStack {
                             Text(session.lastMessage)
                                 .font(Font.system(.body))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(secondaryTextColor(session))
                                 .lineLimit(2)
                                 .frame(
                                     maxWidth: .infinity,
@@ -63,9 +60,10 @@ struct DialogueSessionListView: View {
                                     alignment: .topLeading
                                 )
                         }
-                        .frame(height:44)
+                        .frame(height: 44)
                     }
                 }
+                .tag(session)
                 .contextMenu {
                     Button(role: .destructive) {
                         deleteDialogueHandler(session)
@@ -79,71 +77,30 @@ struct DialogueSessionListView: View {
                         }
                     }
                 }
-#else
-                NavigationLink(value: session) {
-                    HStack {
-                        KFImage.url(session.configuration.model.ollamaModelProvider.iconURL)
-                            .resizable()
-                            .frame(width: 40, height: 40)
-                            .cornerRadius(20)
-                            .padding()
-                        VStack(spacing: 4) {
-                            HStack {
-                                Text(session.configuration.model)
-                                    .bold()
-                                    .font(Font.system(.headline))
-                                Spacer()
-                                Text(session.date.dialogueDesc)
-                                    .font(Font.system(.subheadline))
-                                    .foregroundColor(.secondary)
-                            }
-                            HStack {
-                                Text(session.lastMessage)
-                                    .font(Font.system(.body))
-                                    .foregroundColor(.secondary)
-                                    .lineLimit(2)
-                                    .frame(
-                                        maxWidth: .infinity,
-                                        maxHeight: .infinity,
-                                        alignment: .topLeading
-                                    )
-                            }
-                            .frame(height:44)
-                        }
-                    }
-                }
-                .contextMenu {
-                    Button(role: .destructive) {
-                        deleteDialogueHandler(session)
-                        if session == selectedDialogueSession {
-                            selectedDialogueSession = nil
-                        }
-                    } label: {
-                        HStack {
-                            Image(systemName: "trash")
-                            Text("Delete")
-                        }
-                    }
-                }
-                
-#endif
             }
             .onDelete { indexSet in
                 deleteHandler(indexSet)
             }
         }
         .onAppear(perform: sortList)
-#if os(iOS)
         .listStyle(.plain)
         .navigationTitle(Text("Ollama Message"))
-#else
-        .frame(minWidth: 300)
-#endif
-        .onChange(of: isReplying) { isReplying in
+        .onChange(of: isReplying) { _ in
             updateList()
         }
     }
     
+    private func secondaryTextColor(_ session: DialogueSession) -> Color {
+#if targetEnvironment(macCatalyst)
+        return selectedDialogueSession == session ? Color.systemGray5 : .secondary
+#else
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return selectedDialogueSession == session ? Color.systemGray5 : .secondary
+        }
+        return .secondary
+#endif
+    }
+
     private func updateList() {
         withAnimation {
             if selectedDialogueSession != nil {
@@ -155,7 +112,7 @@ struct DialogueSessionListView: View {
             }
         }
     }
-    
+
     private func sortList() {
         dialogueSessions = dialogueSessions.sorted(by: {
             $0.date > $1.date
@@ -164,12 +121,11 @@ struct DialogueSessionListView: View {
 }
 
 extension Date {
-    
     var dialogueDesc: String {
-        if self.isInYesterday {
+        if isInYesterday {
             return String(localized: "Yesterday")
         }
-        if self.isInToday {
+        if isInToday {
             return timeString(ofStyle: .short)
         }
         return dateString(ofStyle: .short)
@@ -182,6 +138,6 @@ extension Published.Publisher {
     var didSet: AnyPublisher<Value, Never> {
         // Any better ideas on how to get the didSet semantics?
         // This works, but I'm not sure if it's ideal.
-        self.receive(on: RunLoop.main).eraseToAnyPublisher()
+        receive(on: RunLoop.main).eraseToAnyPublisher()
     }
 }

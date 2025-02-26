@@ -42,11 +42,7 @@ struct ConversationView: View {
     }
     
     private func horizontalPadding(for type: MessageType) -> CGFloat {
-#if os(iOS)
         type.isImage ? 105 : 55
-#else
-        type.isImage ? 205 : 105
-#endif
     }
     
     var dateView: some View {
@@ -160,14 +156,7 @@ struct ConversationView: View {
                 senderMessageContent
                     .frame(minHeight: 24)
                     .bubbleStyle(isMyMessage: true, type: conversation.inputType)
-#if os(iOS)
                     .matchedGeometryEffect(id: AnimationID.senderBubble, in: namespace)
-#else
-                    .modify(if: conversation.inputData == nil) { view in
-                        view
-                            .matchedGeometryEffect(id: AnimationID.senderBubble, in: namespace)
-                    }
-#endif
             } else {
                 senderMessageContent
                     .frame(minHeight: 24)
@@ -306,23 +295,13 @@ struct ConversationView: View {
 
 extension String {
     func copyToPasteboard() {
-#if os(iOS)
         UIPasteboard.general.string = self
-#else
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(self, forType: .string)
-#endif
     }
 }
 
 extension KFCrossPlatformImage {
     func copyToPasteboard() {
-#if os(iOS)
         UIPasteboard.general.image = self
-#else
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.writeObjects([self])
-#endif
     }
 }
 

@@ -305,6 +305,7 @@
       }
     },
     "Model Provider" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -335,6 +336,7 @@
       }
     },
     "Name:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -484,6 +486,7 @@
       }
     },
     "Prompt:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -670,6 +673,7 @@
       }
     },
     "Text2Image" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

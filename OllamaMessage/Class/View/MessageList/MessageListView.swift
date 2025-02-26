@@ -34,7 +34,6 @@ struct MessageListView: View {
             } message: {
                 Text("Remove all messages?")
             }
-#if os(iOS)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Button {
@@ -75,19 +74,6 @@ struct MessageListView: View {
                     }
                 }
             }
-#else
-            .navigationTitle(session.configuration.model)
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    Button {
-                        guard !session.isReplying else { return }
-                        isShowClearMessagesAlert = true
-                    } label: {
-                        Image(systemName: "trash")
-                    }
-                }
-            }
-#endif
     }
     
     @State var scrollViewHeight: CGFloat?
@@ -152,7 +138,6 @@ struct MessageListView: View {
                             }
                             .frame(minHeight: geo.size.height)
                         }
-#if os(iOS)
                             .preference(key: HeightPreferenceKey.self, value: geo.frame(in: .global).height)
                             .preference(key: MaxYPreferenceKey.self, value: geo.frame(in: .global).maxY)
                             .onPreferenceChange(HeightPreferenceKey.self) { value in
@@ -186,7 +171,6 @@ struct MessageListView: View {
                             .introspect(.scrollView, on: .iOS(.v16, .v17, .v18)) { scrollView in
                                 scrollView.clipsToBounds = false
                             }
-#endif
                             .onTapGesture {
                                 isTextFieldFocused = false
                             }
@@ -202,7 +186,6 @@ struct MessageListView: View {
                 }
                 promptListView()
             }
-#if os(iOS)
             .onReceive(keyboardWillChangePublisher) { value in
                 if isTextFieldFocused, value {
                     self.keyboadWillShow = value
@@ -237,51 +220,17 @@ struct MessageListView: View {
                     }
                 }
             }
-#else
-            .onAppear {
-                    scrollToBottom(proxy: proxy)
-                    addKeyboardEventMonitorForPromptSearching()
-                    if session.suggestions.isEmpty {
-                        session.createSuggestions {
-                            scrollToBottom(proxy: proxy, anchor: $0)
-                        }
-                    }
-                }
-                .onDisappear {
-                    if let monitor = monitor {
-                        NSEvent.removeMonitor(monitor)
-                    }
-                }
-                .onChange(of: session) { session in
-                    selectedPromptIndex = nil
-                    userHasChangedSelection = false
-                    scrollToBottom(proxy: proxy)
-                    if session.suggestions.isEmpty {
-                        session.createSuggestions {
-                            scrollToBottom(proxy: proxy, anchor: $0)
-                        }
-                    }
-                }
-#endif
                 .onChange(of: selectedPromptIndex, perform: onSelectedPromptIndexChange)
                 .onChange(of: session.input) { _ in
-#if os(iOS)
                     withAnimation {
                         filterPrompts()
                     }
-#else
-                    filterPrompts()
-#endif
                 }
                 .onChange(of: session.inputData) { data in
                     if let _ = data {
-#if os(iOS)
                         withAnimation(after: .milliseconds(100)) {
                             scrollToBottom(proxy: proxy)
                         }
-#else
-
-#endif
                     }
                 }
         }
@@ -313,13 +262,9 @@ struct MessageListView: View {
     }
     
     // MARK: - Search Prompt
-    
-#if os(iOS)
-    
+        
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
-
-#endif
     
     @ViewBuilder
     private func promptListView() -> some View {
@@ -338,25 +283,15 @@ struct MessageListView: View {
                                     Text("/\(prompt.cmd)")
                                         .lineLimit(1)
                                         .bold()
-#if os(macOS)
-                                    Spacer()
-                                    Text(prompt.act)
-                                        .lineLimit(1)
-                                        .foregroundColor(.secondaryLabel)
-#else
                                     if horizontalSizeClass == .regular {
                                         Spacer()
                                         Text(prompt.act)
                                             .lineLimit(1)
                                             .foregroundColor(.secondaryLabel)
                                     }
-#endif
                                 }
                                 .id(index)
                                 .tag(index)
-#if os(macOS)
-                                    .toolTip(prompt.prompt)
-#endif
                             }
                         }
                     }
@@ -364,63 +299,35 @@ struct MessageListView: View {
                     .background(Color.systemBackground)
                     .border(.blue, width: 2)
                     .frame(height: promptListHeight)
-#if os(macOS)
-                        .onChange(of: selectedPromptIndex) { selectedPromptIndex in
-                            if let selectedPromptIndex = selectedPromptIndex, userHasChangedSelection {
-                                promptListProxy.scrollTo(selectedPromptIndex, anchor: .bottom)
-                            }
-                        }
-#endif
                 }
             }
             .frame(minWidth: promptListMinWidth, maxHeight: .infinity)
             .padding(.leading, promptListLeadingPadding)
             .padding(.trailing, promptListTrailingPadding)
             .padding(.bottom, 50)
-#if os(macOS)
-                .onAppear {
-                    selectedPromptIndex = 0
-                }
-#endif
         } else {
             EmptyView()
         }
     }
     
     private var promptListTrailingPadding: CGFloat {
-#if os(macOS)
-        40
-#else
         16
-#endif
     }
     
     private var promptListLeadingPadding: CGFloat {
-#if os(macOS)
-        62
-#else
         horizontalSizeClass == .regular ? 110 : 16
-#endif
     }
     
     private var promptListMinWidth: CGFloat {
-#if os(macOS)
-        400
-#else
         0
-#endif
     }
     
     private var promptListHeight: CGFloat {
-#if os(macOS)
-        min(240, max(CGFloat(prompts.count * 24), 24))
-#else
         if verticalSizeClass == .compact, isTextFieldFocused {
             return min(88, max(CGFloat(prompts.count * 44), 44))
         } else {
             return min(220, max(CGFloat(prompts.count * 44), 44))
         }
-#endif
     }
     
     @State var selectedPromptIndex: Int?
@@ -428,29 +335,6 @@ struct MessageListView: View {
     @State var userHasChangedSelection = false
     
     @State var prompts = PromptManager.shared.prompts
-    
-#if os(macOS)
-    
-    @State private var monitor: Any?
-    
-    private func addKeyboardEventMonitorForPromptSearching() {
-        monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
-            if let selectedPromptIndex = selectedPromptIndex {
-                if nsevent.keyCode == 125 { // arrow down
-                    self.selectedPromptIndex = selectedPromptIndex < prompts.count - 1 ? selectedPromptIndex + 1 : 0
-                    userHasChangedSelection = true
-                } else {
-                    if nsevent.keyCode == 126 { // arrow up
-                        self.selectedPromptIndex = selectedPromptIndex > 0 ? selectedPromptIndex - 1 : prompts.endIndex - 1
-                        userHasChangedSelection = true
-                    }
-                }
-            }
-            return nsevent
-        }
-    }
-    
-#endif
     
     private func filterPrompts() {
         guard session.input.hasPrefix("/") else {
@@ -475,32 +359,16 @@ struct MessageListView: View {
                 return p.range(of: input.lowercased()) != nil || prompt.cmd.lowercased().range(of: input.lowercased()) != nil
             }
         }
-#if os(macOS)
-        selectedPromptIndex = 0
-#endif
     }
     
     private func onSelectedPromptIndexChange(_ index: Int?) {
-#if os(macOS)
-        guard userHasChangedSelection else {
-            return
-        }
-        if let index = index, index < prompts.endIndex {
-            session.input = "/\(prompts[index].cmd)"
-        } else {
-            session.input = ""
-        }
-#else
         if let index = index, index < prompts.endIndex {
             session.input = prompts[index].prompt
         }
-#endif
     }
 }
 
-#if os(iOS)
 extension MessageListView: KeyboardReadable {}
-#endif
 
 struct ScrollViewOffsetPreferenceKey: PreferenceKey {
     static let defaultValue: CGFloat? = nil

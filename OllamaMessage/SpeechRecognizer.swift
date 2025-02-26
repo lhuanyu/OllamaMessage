@@ -5,7 +5,7 @@
 //  Created by LuoHuanyu on 2025/2/22.
 //
 
-#if os(iOS)
+
 import UIKit
 import Accelerate
 import AVFoundation
@@ -224,5 +224,3 @@ extension String {
         return NSLocalizedString(self, comment: "")
     }
 }
-
-#endif

@@ -36,10 +36,5 @@ struct OllamaMessageApp: App {
                     }
                 }
         }
-#if os(macOS)
-        Settings {
-            MacOSSettingsView()
-        }
-#endif
     }
 }

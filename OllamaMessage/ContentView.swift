@@ -30,7 +30,6 @@ struct ContentView: View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             contentView()
                 .toolbar {
-#if os(iOS)
                     ToolbarItem(placement: .automatic) {
                         Button {
                             isShowSettingView = true
@@ -38,7 +37,6 @@ struct ContentView: View {
                             Image(systemName: "ellipsis.circle")
                         }
                     }
-#endif
                     ToolbarItem(placement: .automatic) {
                         Button {
                             showModelPicker = true
@@ -62,18 +60,10 @@ struct ContentView: View {
                         }
                 }
             }
-#if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.visible, for: .navigationBar)
-#else
-            .frame(minWidth: 500)
-#endif
         }
         .navigationSplitViewStyle(.balanced)
-#if os(macOS)
-        .frame(minWidth: 800, minHeight: 500)
-        .background(.secondarySystemBackground)
-#else
         .sheet(isPresented: $isShowSettingView) {
             NavigationStack {
                 AppSettingsView(configuration: configuration)
@@ -90,7 +80,6 @@ struct ContentView: View {
                     }
             }
         }
-#endif
         .sheet(isPresented: $showModelPicker) {
             OllamaModelSelectionView(selectedModelName: $selectedModelName)
                 .presentationDetents([.medium, .large])

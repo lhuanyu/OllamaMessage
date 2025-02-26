@@ -5,7 +5,6 @@
 //  Created by LuoHuanyu on 2023/3/20.
 //
 
-#if os(iOS)
 import UIKit
 import Combine
 
@@ -58,4 +57,3 @@ extension KeyboardReadable {
             .eraseToAnyPublisher()
     }
 }
-#endif

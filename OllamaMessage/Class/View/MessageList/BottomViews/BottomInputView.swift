@@ -37,7 +37,6 @@ struct BottomInputView: View {
                 )
             }
         }
-#if os(iOS)
         .padding([.top, .bottom], 6)
         .background{
             if colorScheme == .light {
@@ -48,18 +47,10 @@ struct BottomInputView: View {
                     .edgesIgnoringSafeArea(.bottom)
             }
         }
-#else
-        .padding(.top, 10)
-        .padding(.bottom, 16)
-#endif
     }
     
     
-#if os(iOS)
     private let leadingComposerDelta: CGFloat = 17
-#else
-    private let leadingComposerDelta: CGFloat = 16
-#endif
     
     
 }

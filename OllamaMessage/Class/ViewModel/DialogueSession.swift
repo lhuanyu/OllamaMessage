@@ -198,15 +198,12 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             isSending = false
             bubbleText = ""
             sendingData = nil
-#if os(iOS)
+            
             withAnimation {
                 scroll?(.top)
                 scroll?(.bottom)
             }
-#else
-            scroll?(.top)
-            scroll?(.bottom)
-#endif
+            
             let stream = try await service.sendMessage(text, data: data)
             isStreaming = true
             AudioServicesPlaySystemSound(1301)
@@ -214,34 +211,28 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 streamText += text
                 conversation.reply = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
                 conversations[conversations.count - 1] = conversation
-#if os(iOS)
+
                 withAnimation {
                     scroll?(.top)///for an issue of iOS 16
                     scroll?(.bottom)
                 }
-#else
-                scroll?(.top)
-                scroll?(.bottom)/// withAnimation may cause scrollview jitter in macOS
-#endif
+
             }
+            
             lastConversationData?.sync(with: conversation)
             isStreaming = false
             createSuggestions(scroll: scroll)
         } catch {
-#if os(iOS)
+
             withAnimation {
                 isStreaming = false
                 conversation.errorDesc = error.localizedDescription
                 lastConversationData?.sync(with: conversation)
                 scroll?(.bottom)
             }
-#else
-            conversation.errorDesc = error.localizedDescription
-            lastConversationData?.sync(with: conversation)
-            scroll?(.bottom)
-#endif
+
         }
-#if os(iOS)
+
         withAnimation {
             conversation.isReplying = false
             updateLastConversation(conversation)
@@ -249,13 +240,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             scroll?(.bottom)
             save()
         }
-#else
-        conversation.isReplying = false
-        updateLastConversation(conversation)
-        isReplying = false
-        scroll?(.bottom)
-        save()
-#endif
 
     }
     
@@ -273,17 +257,14 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             do {
                 let suggestions = try await service.createSuggestions()
                 print(suggestions)
-#if os(iOS)
+
                 withAnimation {
                     self.suggestions = suggestions
                 }
                 withAnimation(after: .milliseconds(250)) {
                     scroll?(.bottom)
                 }
-#else
-                self.suggestions = suggestions
-                scroll?(.bottom)
-#endif
+
             } catch let error {
                 print(error)
             }

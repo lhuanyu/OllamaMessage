@@ -6,8 +6,6 @@
 //
 
 
-#if os(iOS)
-
 import SwiftUI
 import Combine
 
@@ -46,5 +44,3 @@ extension View {
         self.modifier(ScrollViewDidScrollViewModifier(didScroll: didScroll))
     }
 }
-
-#endif

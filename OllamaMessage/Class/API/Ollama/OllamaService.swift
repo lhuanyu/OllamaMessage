@@ -22,11 +22,7 @@ class OllamaService: @unchecked Sendable {
     }
         
     private var suggestionsCount: Int {
-#if os(iOS)
         return 3
-#else
-        return 5
-#endif
     }
     
     func createSuggestions() async throws -> [String] {
