@@ -100,7 +100,8 @@ struct MessageListView: View {
                                     ConversationView(
                                         conversation: conversation,
                                         namespace: animation,
-                                        lastConversationDate: index > 0 ? session.conversations[index - 1].date : nil
+                                        lastConversationDate: index > 0 ? session.conversations[index - 1].date : nil,
+                                        isLastConversation: index == session.conversations.endIndex - 1
                                     ) { conversation in
                                         Task { @MainActor in
                                             await session.retry(conversation, scroll: {

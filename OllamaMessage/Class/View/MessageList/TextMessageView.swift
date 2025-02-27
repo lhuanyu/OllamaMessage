@@ -15,7 +15,11 @@ struct TextMessageView: View {
     
     var body: some View {
         if AppConfiguration.shared.isMarkdownEnabled {
-            MessageMarkdownView(think: think, text: text)
+            MessageMarkdownView(
+                think: think,
+                text: text,
+                isReplying: isReplying
+            )
                 .textSelection(.enabled)
         } else {
             if text.isEmpty {

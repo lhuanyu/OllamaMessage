@@ -15,23 +15,55 @@ struct MessageMarkdownView: View {
     var think: String?
 
     var text: String
+    
+    var isReplying: Bool
+    
+    @State private var isThinkingExpanded = false
 
     var body: some View {
         VStack(alignment: .leading) {
             if let think = think, !think.isEmpty {
-                Markdown {
-                    Blockquote {
-                        think
+                VStack(alignment: .leading, spacing: 0) {
+                    Button {
+                        withAnimation {
+                            isThinkingExpanded.toggle()
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "chevron.right")
+                                .frame(width: 14, height: 14)
+                                .rotationEffect(.degrees(isThinkingExpanded ? 90 : 0))
+                                .foregroundColor(.secondary)
+                                .padding(.leading)
+                            Text("Reasoning Thinking")
+                                .foregroundColor(.secondary)
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical)
+                    }
+                    if isThinkingExpanded || isReplying {
+                        Text(think)
+                            .padding(.horizontal)
+                            .padding(.bottom)
+                            .foregroundColor(.secondary)
                     }
                 }
-                .markdownTheme(.gitHub)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
                 .padding(.vertical)
+                .disabled(isReplying)
             }
             if !self.text.isEmpty {
                 Markdown(MarkdownContent(self.text))
                     .markdownCodeSyntaxHighlighter(.splash(theme: self.theme))
                     .markdownImageProvider(.webImage)
                     .textSelection(.enabled)
+            }
+        }
+        .onAppear {
+            if isReplying {
+                isThinkingExpanded = true
             }
         }
     }

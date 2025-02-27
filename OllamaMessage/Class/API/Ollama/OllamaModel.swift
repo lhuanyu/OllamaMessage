@@ -61,6 +61,8 @@ struct OllamaModel: Codable, Identifiable {
     let digest: String
     let details: Details
     
+    static let none = OllamaModel(name: "None", modifiedAt: "", size: 0, digest: "", details: .init(format: "", family: "", families: nil, parameterSize: "", quantizationLevel: ""))
+    
 }
 // 请求体模型
 struct OllamaChatRequest: Codable {

@@ -81,8 +81,12 @@ struct ContentView: View {
             }
         }
         .sheet(isPresented: $showModelPicker) {
-            OllamaModelSelectionView(selectedModelName: $selectedModelName)
-                .presentationDetents([.medium, .large])
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                OllamaModelSelectionView(selectedModelName: $selectedModelName)
+            } else {
+                OllamaModelSelectionView(selectedModelName: $selectedModelName)
+                    .presentationDetents([.medium, .large])
+            }
             
         }
         .onChange(of: selectedModelName) { name in

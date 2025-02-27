@@ -364,6 +364,17 @@
         }
       }
     },
+    "None" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无"
+          }
+        }
+      }
+    },
     "Ollama" : {
       "shouldTranslate" : false
     },
@@ -483,6 +494,16 @@
         }
       }
     },
+    "Reasoning Thinking" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "深度思考"
+          }
+        }
+      }
+    },
     "Regenerate" : {
       "localizations" : {
         "zh-Hans" : {
@@ -552,6 +573,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "响应错误： %@， %@"
+          }
+        }
+      }
+    },
+    "Select a model to use for generating replies. Models with the eye icon are vision models." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择一个模型用于生成回复。带有眼睛图标的模型是视觉模型。"
           }
         }
       }

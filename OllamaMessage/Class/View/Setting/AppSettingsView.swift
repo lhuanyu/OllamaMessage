@@ -19,7 +19,7 @@ final class AppConfiguration: ObservableObject, @unchecked Sendable {
     
     @AppStorage("configuration.model") var model: String = ""
     
-    @AppStorage("configuration.suggestionsModel") var suggestionsModel: String = ""
+    @AppStorage("configuration.suggestionsModel") var suggestionsModel: String = "None"
         
     @AppStorage("configuration.isReplySuggestionsEnabled") var isReplySuggestionsEnabled = true
         
@@ -58,8 +58,8 @@ struct AppSettingsView: View {
                     Image(systemName: "arrow.up.message")
                         .renderingMode(.original)
                     Picker("Reply Suggestions Model", selection: $configuration.suggestionsModel) {
-                        ForEach(OllamaConfiguration.shared.models) { model in
-                            Text(model.name).tag(model.name)
+                        ForEach([.none] + OllamaConfiguration.shared.models) { model in
+                            Text(model.name.localized).tag(model.name)
                         }
                     }
                 }

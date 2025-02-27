@@ -18,27 +18,32 @@ struct OllamaModelSelectionView: View {
     var body: some View {
         NavigationStack {
             List {
-                if OllamaConfiguration.shared.models.isEmpty && ollamaConfiguration.isFetching {
-                    ProgressView()
-                }
-                ForEach(OllamaConfiguration.shared.models) { model in
-                    HStack {
-                        KFImage(model.name.ollamaModelProvider.iconURL)
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .scaledToFit()
-                        Text(model.name)
-                        Spacer()
-                        if model.name.ollamaModelProvider.isVisionModel {
-                            Image(systemName: "eye")
-                                .foregroundColor(.accentColor)
+                Section {
+                    if OllamaConfiguration.shared.models.isEmpty && ollamaConfiguration.isFetching {
+                        ProgressView()
+                    }
+                    ForEach(OllamaConfiguration.shared.models) { model in
+                        HStack {
+                            KFImage(model.name.ollamaModelProvider.iconURL)
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .scaledToFit()
+                            Text(model.name)
+                            Spacer()
+                            if model.name.ollamaModelProvider.isVisionModel {
+                                Image(systemName: "eye")
+                                    .foregroundColor(.accentColor)
+                            }
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            selectedModelName = model.name
+                            presentationMode.wrappedValue.dismiss()
                         }
                     }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        selectedModelName = model.name
-                        presentationMode.wrappedValue.dismiss()
-                    }
+                } footer: {
+                    Text("Select a model to use for generating replies. Models with the eye icon are vision models.")
+                        .font(.caption)
                 }
             }
             .task {
@@ -47,7 +52,7 @@ struct OllamaModelSelectionView: View {
             .navigationTitle("Model")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .automatic) {
+                ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
@@ -55,7 +60,7 @@ struct OllamaModelSelectionView: View {
                             .bold()
                     }
                 }
-                ToolbarItem(placement: .automatic) {
+                ToolbarItem(placement: .topBarLeading) {
                     Button {
                         Task {
                             await OllamaConfiguration.shared.fetchModels()

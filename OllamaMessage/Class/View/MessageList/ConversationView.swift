@@ -17,6 +17,7 @@ struct ConversationView: View {
     let conversation: Conversation
     let namespace: Namespace.ID
     var lastConversationDate: Date?
+    var isLastConversation: Bool = false
     let retryHandler: (Conversation) -> Void
     
     @State var isEditing = false
@@ -238,7 +239,7 @@ struct ConversationView: View {
                             TextMessageView(
                                 think: String(think),
                                 text: text,
-                                isReplying: conversation.isReplying)
+                                isReplying: conversation.isReplying && isLastConversation)
                         } else if reply.hasPrefix("<think>") {
                             let think = reply.trimmingPrefix("<think>").trimmingCharacters(in: .whitespacesAndNewlines)
                             TextMessageView(
@@ -246,10 +247,10 @@ struct ConversationView: View {
                                 text: "",
                                 isReplying: conversation.isReplying)
                         } else {
-                            TextMessageView(text: reply, isReplying: conversation.isReplying)
+                            TextMessageView(text: reply, isReplying: conversation.isReplying && isLastConversation)
                         }
                     } else {
-                        TextMessageView(text: "", isReplying: conversation.isReplying)
+                        TextMessageView(text: "", isReplying: conversation.isReplying && isLastConversation)
                     }
                 case .image:
                     ImageMessageView(url: conversation.replyImageURL)
