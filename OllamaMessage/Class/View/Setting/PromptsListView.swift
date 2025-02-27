@@ -15,7 +15,7 @@ struct PromptsListView: View {
                 
     var body: some View {
         List {
-            Section(header: "", footer: manager.isSyncing ? "Updating..." : manager.lastSyncAt.dateDesc) {
+            Section(header: "", footer: manager.isSyncing ? "Updating...".localized : manager.lastSyncAt.dateDesc) {
                 HStack {
                     Text("Source")
                     TextField("", text: manager.$promptSource)

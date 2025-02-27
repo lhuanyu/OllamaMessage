@@ -304,17 +304,6 @@
         }
       }
     },
-    "Model Provider" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "模型提供者"
-          }
-        }
-      }
-    },
     "Models" : {
       "localizations" : {
         "zh-Hans" : {
@@ -331,17 +320,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "名称"
-          }
-        }
-      }
-    },
-    "Name:" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "名称:"
           }
         }
       }
@@ -481,17 +459,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "提示词"
-          }
-        }
-      }
-    },
-    "Prompt:" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "提示词:"
           }
         }
       }
@@ -672,17 +639,6 @@
         }
       }
     },
-    "Text2Image" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "文字生成图片"
-          }
-        }
-      }
-    },
     "Today" : {
       "localizations" : {
         "zh-Hans" : {
@@ -720,6 +676,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新中"
+          }
+        }
+      }
+    },
+    "Updating..." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新中…"
           }
         }
       }
