@@ -18,6 +18,8 @@ final class AppConfiguration: ObservableObject, @unchecked Sendable {
     @AppStorage("configuration.key") var key = ""
     
     @AppStorage("configuration.model") var model: String = ""
+    
+    @AppStorage("configuration.suggestionsModel") var suggestionsModel: String = ""
         
     @AppStorage("configuration.isReplySuggestionsEnabled") var isReplySuggestionsEnabled = true
         
@@ -50,6 +52,16 @@ struct AppSettingsView: View {
                         .renderingMode(.original)
                     Toggle("Markdown Enabled", isOn: $configuration.isMarkdownEnabled)
                     Spacer()
+                }
+                /// Model for Suggestions
+                HStack {
+                    Image(systemName: "arrow.up.message")
+                        .renderingMode(.original)
+                    Picker("Reply Suggestions Model", selection: $configuration.suggestionsModel) {
+                        ForEach(OllamaConfiguration.shared.models) { model in
+                            Text(model.name).tag(model.name)
+                        }
+                    }
                 }
             }
             Section("Model") {

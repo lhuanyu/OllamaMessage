@@ -524,6 +524,16 @@
         }
       }
     },
+    "Reply Suggestions Model" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回复建议模型"
+          }
+        }
+      }
+    },
     "Response Error: %@" : {
       "extractionState" : "manual",
       "localizations" : {

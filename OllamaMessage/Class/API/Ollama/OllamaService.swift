@@ -26,6 +26,9 @@ class OllamaService: @unchecked Sendable {
     }
     
     func createSuggestions() async throws -> [String] {
+        guard !AppConfiguration.shared.suggestionsModel.isEmpty else {
+            return []
+        }
         let chatHistory = messages.reduce("") { $0 + "[\($1.role)]:\($1.content)" + "\n" }
         let prompt = """
         There is a conversation between a user and an assistant. The conversation is as follows: \n\(chatHistory)\n
@@ -35,7 +38,7 @@ class OllamaService: @unchecked Sendable {
         - Return the suggestions only in an array format, such as: ["suggestion1", "suggestion2", "suggestion3"], do not use markdown syntax. 
         - You must return \(suggestionsCount) suggestions.
         """
-        let suggestions = try await chat(prompt, model: "qwen2:latest", includingHistory: false)
+        let suggestions = try await chat(prompt, model: AppConfiguration.shared.suggestionsModel, includingHistory: false)
         print("Suggestions: \(suggestions)")
         return suggestions.normalizedPrompts
     }
