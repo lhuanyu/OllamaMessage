@@ -5,15 +5,13 @@
 //  Created by LuoHuanyu on 2025/2/22.
 //
 
-
-import UIKit
 import Accelerate
 import AVFoundation
 import Foundation
 import Speech
+import UIKit
 
 final class SpeechRecognizer: NSObject, ObservableObject, @unchecked Sendable {
-    
     static let shared = SpeechRecognizer()
 
     private let audioEngine = AVAudioEngine()
@@ -70,14 +68,27 @@ final class SpeechRecognizer: NSObject, ObservableObject, @unchecked Sendable {
     }
 
     func requestMicrophonePermission() {
-        AVAudioSession.sharedInstance().requestRecordPermission { granted in
-            if granted {
-                print("Microphone access granted after request")
-            } else {
-                print("Microphone access denied after request")
+        if #available(macCatalyst 17.0, *) {
+            AVAudioApplication.requestRecordPermission { granted in
+                if granted {
+                    print("Microphone access granted after require")
+                } else {
+                    print("Microphone access denied after require")
+                }
+                DispatchQueue.main.async {
+                    self.isRecordPermissionGranted = granted
+                }
             }
-            DispatchQueue.main.async {
-                self.isRecordPermissionGranted = granted
+        } else {
+            AVAudioSession.sharedInstance().requestRecordPermission { granted in
+                if granted {
+                    print("Microphone access granted after request")
+                } else {
+                    print("Microphone access denied after request")
+                }
+                DispatchQueue.main.async {
+                    self.isRecordPermissionGranted = granted
+                }
             }
         }
     }

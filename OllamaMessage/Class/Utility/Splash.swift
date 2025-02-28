@@ -65,10 +65,10 @@ struct SplashCodeSyntaxHighlighter: CodeSyntaxHighlighter {
     }
     
     func highlightCode(_ content: String, language: String?) -> Text {
-        guard language?.lowercased() == "swift" else {
-            return Text(content)
-        }
-        
+//        guard language?.lowercased() == "swift" else {
+//            return Text(content)
+//        }
+//        
         return self.syntaxHighlighter.highlight(content)
     }
 }
