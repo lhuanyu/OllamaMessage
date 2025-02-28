@@ -136,7 +136,7 @@ struct ComposerInputView: View {
                     .foregroundColor(.blue)
                     .font(.body.weight(.semibold))
             }
-            .keyboardShortcut(.defaultAction)
+            .keyboardShortcut(.return)
         } else {
             if session.isStreaming {
                 Button {

@@ -68,27 +68,14 @@ final class SpeechRecognizer: NSObject, ObservableObject, @unchecked Sendable {
     }
 
     func requestMicrophonePermission() {
-        if #available(macCatalyst 17.0, *) {
-            AVAudioApplication.requestRecordPermission { granted in
-                if granted {
-                    print("Microphone access granted after require")
-                } else {
-                    print("Microphone access denied after require")
-                }
-                DispatchQueue.main.async {
-                    self.isRecordPermissionGranted = granted
-                }
+        AVAudioSession.sharedInstance().requestRecordPermission { granted in
+            if granted {
+                print("Microphone access granted after request")
+            } else {
+                print("Microphone access denied after request")
             }
-        } else {
-            AVAudioSession.sharedInstance().requestRecordPermission { granted in
-                if granted {
-                    print("Microphone access granted after request")
-                } else {
-                    print("Microphone access denied after request")
-                }
-                DispatchQueue.main.async {
-                    self.isRecordPermissionGranted = granted
-                }
+            DispatchQueue.main.async {
+                self.isRecordPermissionGranted = granted
             }
         }
     }

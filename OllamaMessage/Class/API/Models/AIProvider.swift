@@ -26,8 +26,8 @@ enum OllamaModelProvider: String {
         switch self {
         case .phi:
             return URL(string: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/\(styleName)/microsoft-color.png")
-        case .llama, .llamaVision:
-            return URL(string: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/\(styleName)/meta-color.png")
+//        case .llama, .llamaVision:
+//            return URL(string: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/\(styleName)/meta-color.png")
         case .qwen, .deepseek, .gemma, .mistral, .llava:
             return URL(string: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/\(styleName)/\(rawValue)-color.png")
         default:
