@@ -32,8 +32,6 @@ struct TextMessageView: View {
     }
 }
 
-struct TextMessageView_Previews: PreviewProvider {
-    static var previews: some View {
-        TextMessageView(text: "Test", isReplying: false)
-    }
+#Preview {
+    TextMessageView(text: "Test", isReplying: false)
 }

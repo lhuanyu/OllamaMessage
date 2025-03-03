@@ -125,8 +125,6 @@ struct CustomPromptsView: View {
     
 }
 
-struct CustomPromptsView_Previews: PreviewProvider {
-    static var previews: some View {
-        CustomPromptsView()
-    }
+#Preview {
+    CustomPromptsView()
 }

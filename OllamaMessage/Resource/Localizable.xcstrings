@@ -199,6 +199,16 @@
         }
       }
     },
+    "Fetching models..." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加载可用模型…"
+          }
+        }
+      }
+    },
     "General" : {
       "localizations" : {
         "zh-Hans" : {
@@ -573,6 +583,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "响应错误： %@， %@"
+          }
+        }
+      }
+    },
+    "See all models on Ollama" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看所有模型"
           }
         }
       }

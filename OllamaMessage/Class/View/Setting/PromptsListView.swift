@@ -76,10 +76,8 @@ struct PromptDetailView: View {
     
 }
 
-struct PromptsListView_Previews: PreviewProvider {
-    static var previews: some View {
-        PromptsListView()
-    }
+#Preview {
+    PromptsListView()
 }
 
 extension TimeInterval {

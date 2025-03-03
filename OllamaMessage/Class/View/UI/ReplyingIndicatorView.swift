@@ -53,9 +53,8 @@ struct ReplyingIndicatorView: View {
     }
 }
 
-struct DotLoadingView_Previews: PreviewProvider {
-    static var previews: some View {
-        ReplyingIndicatorView()
-    }
+#Preview {
+    ReplyingIndicatorView()
+        .frame(height: 40)
 }
 

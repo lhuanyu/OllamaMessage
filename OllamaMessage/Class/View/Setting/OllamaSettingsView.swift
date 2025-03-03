@@ -5,8 +5,8 @@
 //  Created by LuoHuanyu on 2025/2/14.
 //
 
-import SwiftUI
 import Kingfisher
+import SwiftUI
 
 class OllamaConfiguration: ObservableObject {
     @MainActor static let shared = OllamaConfiguration()
@@ -57,13 +57,16 @@ struct OllamaSettingsView: View {
     
     @State var models = [OllamaModel]()
     
+    @State var selectedModel: OllamaModel?
+    
+    @State private var showOllamaModelList = false
+    
     var body: some View {
         List {
             Section("API") {
-//                TextField("API Key", text: $apiKey)
                 TextField("API Host", text: $apiHost)
             }
-            Section("Models") {
+            Section {
                 if isFetching {
                     HStack {
                         ProgressView()
@@ -76,16 +79,36 @@ struct OllamaSettingsView: View {
                                 .frame(width: 24, height: 24)
                             Text(model.name + "(\(model.details.parameterSize))")
                             Spacer()
-                            if model.name == modelName {
-                                Image(systemName: "checkmark")
-                                    .frame(width: 20, height: 20)
-                                    .foregroundColor(.accentColor)
-                            }
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.secondary)
                         }
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            modelName = model.name
+                            #if targetEnvironment(macCatalyst)
+                            UIApplication.shared.open(URL(string: "https://ollama.com/library/\(model.name)")!)
+                            #else
+                            selectedModel = model
+                            #endif
                         }
+                    }
+                }
+            } header: {
+                Text("Models")
+            } footer: {
+                if isFetching {
+                    Text("Fetching models...")
+                        .font(.caption)
+                } else {
+                    Button {
+                        #if targetEnvironment(macCatalyst)
+                        UIApplication.shared.open(URL(string: "https://ollama.com/library")!)
+                        #else
+                        showOllamaModelList = true
+                        #endif
+                    } label: {
+                        Text("See all models on Ollama")
+                            .font(.caption)
+                            .foregroundColor(.blue)
                     }
                 }
             }
@@ -99,6 +122,12 @@ struct OllamaSettingsView: View {
             }
         }
         .navigationBarTitle("Ollama")
+        .sheet(item: $selectedModel) { model in
+            SafariView(url: URL(string: "https://ollama.com/library/\(model.name)")!)
+        }
+        .sheet(isPresented: $showOllamaModelList) {
+            SafariView(url: URL(string: "https://ollama.com/library")!)
+        }
     }
     
     @State private var isFetching = true
@@ -127,11 +156,19 @@ struct OllamaSettingsView: View {
             }
             print(models)
         } catch {
+            withAnimation {
+                isFetching = false
+            }
             print(error)
         }
     }
 }
 
 #Preview {
-    OllamaSettingsView()
+    NavigationView {
+        OllamaSettingsView()
+            .onAppear {
+                UIPasteboard.general.string = "http://localhost:11434"
+            }
+    }
 }

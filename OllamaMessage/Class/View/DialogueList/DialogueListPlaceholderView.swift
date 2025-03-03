@@ -23,8 +23,6 @@ struct DialogueListPlaceholderView: View {
     }
 }
 
-struct DialogueListPlaceholderView_Previews: PreviewProvider {
-    static var previews: some View {
-        DialogueListPlaceholderView()
-    }
+#Preview {
+    DialogueListPlaceholderView()
 }

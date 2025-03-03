@@ -22,8 +22,6 @@ struct ImageDataMessageView: View {
     }
 }
 
-struct ImageDataMessageView_Previews: PreviewProvider {
-    static var previews: some View {
-        ImageDataMessageView()
-    }
+#Preview {
+    ImageDataMessageView()
 }

@@ -28,8 +28,6 @@ struct ErrorMessageView: View {
     }
 }
 
-struct ErrorMessageView_Previews: PreviewProvider {
-    static var previews: some View {
-        ErrorMessageView(error: "请求超时")
-    }
+#Preview {
+    ErrorMessageView()
 }

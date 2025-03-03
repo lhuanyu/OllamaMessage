@@ -13,6 +13,7 @@
 		E41B8B862D6DFDBA00E2325D /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8B852D6DFDBA00E2325D /* AboutView.swift */; };
 		E41B8B882D6EBCA700E2325D /* PulseEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8B872D6EBCA700E2325D /* PulseEffect.swift */; };
 		E44349152D5F3A6A00A8D232 /* OllamaSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44349142D5F3A6A00A8D232 /* OllamaSettingsView.swift */; };
+		E482A5882D7549C8000B20C8 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E482A5872D7549C8000B20C8 /* SafariView.swift */; };
 		E4924EF429DC309E00B69605 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E4924EF329DC309E00B69605 /* Kingfisher */; };
 		E4924F0229DEE8CB00B69605 /* ImageMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4924F0129DEE8CB00B69605 /* ImageMessageView.swift */; };
 		E4924F0429DEE8DD00B69605 /* ImageDataMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4924F0329DEE8DD00B69605 /* ImageDataMessageView.swift */; };
@@ -85,6 +86,7 @@
 		E41B8B852D6DFDBA00E2325D /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		E41B8B872D6EBCA700E2325D /* PulseEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseEffect.swift; sourceTree = "<group>"; };
 		E44349142D5F3A6A00A8D232 /* OllamaSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaSettingsView.swift; sourceTree = "<group>"; };
+		E482A5872D7549C8000B20C8 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		E4924F0129DEE8CB00B69605 /* ImageMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMessageView.swift; sourceTree = "<group>"; };
 		E4924F0329DEE8DD00B69605 /* ImageDataMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataMessageView.swift; sourceTree = "<group>"; };
 		E4924F0529DEE8E900B69605 /* TextMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageView.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 				E44349142D5F3A6A00A8D232 /* OllamaSettingsView.swift */,
 				E4E99BCF29D681A000C0FCBD /* PromptsListView.swift */,
 				E4994DEA29D6E655002981D0 /* CustomPromptsView.swift */,
+				E482A5872D7549C8000B20C8 /* SafariView.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -546,6 +549,7 @@
 				E4C65EF629CA9F7800AFA884 /* AppSettingsView.swift in Sources */,
 				E4924F0429DEE8DD00B69605 /* ImageDataMessageView.swift in Sources */,
 				E4E99BD029D681A000C0FCBD /* PromptsListView.swift in Sources */,
+				E482A5882D7549C8000B20C8 /* SafariView.swift in Sources */,
 				E4C65EF129CA9F7800AFA884 /* MessageMarkdownView.swift in Sources */,
 				E4C65EF529CA9F7800AFA884 /* ComposerInputView.swift in Sources */,
 				E4CA1DAB2D60C895000F6F44 /* Message.swift in Sources */,
