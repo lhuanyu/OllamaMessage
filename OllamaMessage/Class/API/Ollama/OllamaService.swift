@@ -30,14 +30,28 @@ class OllamaService: @unchecked Sendable {
             return []
         }
         let chatHistory = messages.reduce("") { $0 + "[\($1.role)]:\($1.content)" + "\n" }
-        let prompt = """
-        There is a conversation between a user and an assistant. The conversation is as follows: \n\(chatHistory)\n
-        - Generate \(suggestionsCount) suggestions for the next quetion user might ask based on the conversation above.
-        - The suggestions should use the same language of the locale '\(Locale.current)'. 
-        - The suggestions should be short and unique.
-        - Return the suggestions only in an array format, such as: ["suggestion1", "suggestion2", "suggestion3"], do not use markdown syntax. 
-        - You must return \(suggestionsCount) suggestions.
-        """
+        let prompt: String
+        
+        if messages.isEmpty {
+            prompt = """
+            - Generate \(suggestionsCount) suggestions for the first question user might ask.
+            - The suggestions should cover a wide range of topics and be interesting.
+            - The suggestions should use the same language of the locale '\(Locale.current)'.
+            - The suggestions should be short and unique.
+            - Return the suggestions only in an array format, such as: ["suggestion1", "suggestion2", "suggestion3"], do not use markdown syntax.
+            - You must return \(suggestionsCount) suggestions.
+            """
+        } else {
+            prompt = """
+            There is a conversation between a user and an assistant. The conversation is as follows: \n\(chatHistory)\n
+            - Generate \(suggestionsCount) suggestions for the next quetion user might ask based on the conversation above.
+            - The suggestions should use the same language of the locale '\(Locale.current)'. 
+            - The suggestions should be short and unique.
+            - Return the suggestions only in an array format, such as: ["suggestion1", "suggestion2", "suggestion3"], do not use markdown syntax. 
+            - You must return \(suggestionsCount) suggestions.
+            """
+        }
+
         let suggestions = try await chat(prompt, model: AppConfiguration.shared.suggestionsModel, includingHistory: false)
         print("Suggestions: \(suggestions)")
         return suggestions.normalizedPrompts
