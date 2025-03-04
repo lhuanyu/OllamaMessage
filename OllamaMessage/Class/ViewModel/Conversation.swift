@@ -49,7 +49,11 @@ struct Conversation: Identifiable, Codable, Equatable {
         if replyType == .image || replyType == .imageData {
             return String(localized: "[Image]")
         }
-        return reply ?? ""
+        return replyContent ?? ""
+    }
+    
+    private var replyContent: String? {
+        reply?.components(separatedBy: "</think>").last?.trimmingCharacters(in: .whitespacesAndNewlines) ?? reply
     }
     
     private var inputPreview: String {

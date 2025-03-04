@@ -53,9 +53,16 @@ struct AppSettingsView: View {
                     Toggle("Markdown Enabled", isOn: $configuration.isMarkdownEnabled)
                     Spacer()
                 }
-                /// Model for Suggestions
+                /// Reply Suggestions
                 HStack {
                     Image(systemName: "arrow.up.message")
+                        .renderingMode(.original)
+                    Toggle("Reply Suggestions", isOn: $configuration.isReplySuggestionsEnabled)
+                    Spacer()
+                }
+                /// Model for Suggestions
+                HStack {
+                    Image(systemName: "brain.head.profile")
                         .renderingMode(.original)
                     Picker("Reply Suggestions Model", selection: $configuration.suggestionsModel) {
                         ForEach([.none] + OllamaConfiguration.shared.models) { model in

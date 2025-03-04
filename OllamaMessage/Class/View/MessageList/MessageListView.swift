@@ -65,12 +65,14 @@ struct MessageListView: View {
                         }
                     }
                 }
-                ToolbarItem(placement: .automatic) {
-                    Button {
-                        guard !session.isReplying else { return }
-                        isShowClearMessagesAlert = true
-                    } label: {
-                        Image(systemName: "trash")
+                if !session.conversations.isEmpty {
+                    ToolbarItem(placement: .automatic) {
+                        Button {
+                            guard !session.isReplying else { return }
+                            isShowClearMessagesAlert = true
+                        } label: {
+                            Image(systemName: "trash")
+                        }
                     }
                 }
             }

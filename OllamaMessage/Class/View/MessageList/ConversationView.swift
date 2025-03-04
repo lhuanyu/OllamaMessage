@@ -164,7 +164,7 @@ struct ConversationView: View {
                     .bubbleStyle(isMyMessage: true, type: conversation.inputType)
             }
         }
-        if conversation.inputData != nil {
+        if conversation.inputData != nil && !conversation.input.isEmpty {
             HStack(spacing: 0) {
                 Spacer()
                 Text(conversation.input)

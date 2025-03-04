@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class OllamaService: @unchecked Sendable {
+final class OllamaService: @unchecked Sendable {
     init(configuration: DialogueSession.Configuration) {
         self.configuration = configuration
     }
@@ -202,18 +202,6 @@ class OllamaService: @unchecked Sendable {
 }
 
 extension String {
-    var isImageGenerationPrompt: Bool {
-        lowercased().hasPrefix("draw") || lowercased().hasPrefix("画")
-    }
-    
-    var imagePrompt: String {
-        if lowercased().hasPrefix("draw") {
-            return deletingPrefix("draw")
-        } else if hasPrefix("画") {
-            return deletingPrefix("画")
-        }
-        return self
-    }
     
     func deletingPrefix(_ prefix: String) -> String {
         guard hasPrefix(prefix) else { return self }
