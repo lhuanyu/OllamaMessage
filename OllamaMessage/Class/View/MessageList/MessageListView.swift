@@ -87,6 +87,8 @@ struct MessageListView: View {
     @Namespace var animation
     
     private let bottomID = "bottomID"
+    
+    @State var isTouching = false
 
     var contentView: some View {
         ScrollViewReader { proxy in
@@ -94,9 +96,6 @@ struct MessageListView: View {
                 VStack(spacing: 0) {
                     GeometryReader { geo in
                         ScrollView {
-                            if session.conversations.isEmpty {
-                                Color.clear
-                            }
                             VStack(spacing: 0) {
                                 ForEach(enumerating: Array(session.conversations.enumerated())) { index, conversation in
                                     ConversationView(
@@ -140,43 +139,50 @@ struct MessageListView: View {
                                 .id(bottomID)
                             }
                             .frame(minHeight: geo.size.height)
+                            .simultaneousGesture(
+                                DragGesture().onChanged { _ in
+                                    isTouching = true
+                                }.onEnded { _ in
+                                    isTouching = false
+                                }
+                            )
                         }
-                            .preference(key: HeightPreferenceKey.self, value: geo.frame(in: .global).height)
-                            .preference(key: MaxYPreferenceKey.self, value: geo.frame(in: .global).maxY)
-                            .onPreferenceChange(HeightPreferenceKey.self) { value in
-                                Task { @MainActor in
-                                    if let value = value {
-                                        if keyboadWillShow {
-                                            keyboadWillShow = false
-                                            withAnimation(.easeOut(duration: 0.1), after: .milliseconds(60)) {
+                        .preference(key: HeightPreferenceKey.self, value: geo.frame(in: .global).height)
+                        .preference(key: MaxYPreferenceKey.self, value: geo.frame(in: .global).maxY)
+                        .onPreferenceChange(HeightPreferenceKey.self) { value in
+                            Task { @MainActor in
+                                if let value = value {
+                                    if keyboadWillShow {
+                                        keyboadWillShow = false
+                                        withAnimation(.easeOut(duration: 0.1), after: .milliseconds(60)) {
+                                            scrollToBottom(proxy: proxy)
+                                        }
+                                    }
+                                    scrollViewHeight = value
+                                }
+                            }
+                        }
+                        .onPreferenceChange(MaxYPreferenceKey.self) { value in
+                            Task { @MainActor in
+                                if let value = value {
+                                    if let scrollViewMaxY = scrollViewMaxY {
+                                        let delta = scrollViewMaxY - value
+                                        if delta > 0, delta < 30 {
+                                            withAnimation(.easeOut(duration: 0.1)) {
                                                 scrollToBottom(proxy: proxy)
                                             }
                                         }
-                                        scrollViewHeight = value
                                     }
+                                    scrollViewMaxY = value
                                 }
                             }
-                            .onPreferenceChange(MaxYPreferenceKey.self) { value in
-                                Task { @MainActor in
-                                    if let value = value {
-                                        if let scrollViewMaxY = scrollViewMaxY {
-                                            let delta = scrollViewMaxY - value
-                                            if delta > 0, delta < 30 {
-                                                withAnimation(.easeOut(duration: 0.1)) {
-                                                    scrollToBottom(proxy: proxy)
-                                                }
-                                            }
-                                        }
-                                        scrollViewMaxY = value
-                                    }
-                                }
-                            }
-                            .introspect(.scrollView, on: .iOS(.v16, .v17, .v18)) { scrollView in
-                                scrollView.clipsToBounds = false
-                            }
-                            .onTapGesture {
-                                isTextFieldFocused = false
-                            }
+                        }
+                        .introspect(.scrollView, on: .iOS(.v16, .v17, .v18)) { scrollView in
+                            scrollView.clipsToBounds = false
+                        }
+                        .onTapGesture {
+                            isTextFieldFocused = false
+                        }
                     }
                     BottomInputView(
                         session: session,
@@ -215,6 +221,9 @@ struct MessageListView: View {
                     isTextFieldFocused = true
                 }
             }
+            .onDisappear {
+                session.stop()
+            }
             .onChange(of: session) { session in
                 scrollToBottom(proxy: proxy)
                 if session.suggestions.isEmpty {
@@ -223,19 +232,19 @@ struct MessageListView: View {
                     }
                 }
             }
-                .onChange(of: selectedPromptIndex, perform: onSelectedPromptIndexChange)
-                .onChange(of: session.input) { _ in
-                    withAnimation {
-                        filterPrompts()
+            .onChange(of: selectedPromptIndex, perform: onSelectedPromptIndexChange)
+            .onChange(of: session.input) { _ in
+                withAnimation {
+                    filterPrompts()
+                }
+            }
+            .onChange(of: session.inputData) { data in
+                if let _ = data {
+                    withAnimation(after: .milliseconds(100)) {
+                        scrollToBottom(proxy: proxy)
                     }
                 }
-                .onChange(of: session.inputData) { data in
-                    if let _ = data {
-                        withAnimation(after: .milliseconds(100)) {
-                            scrollToBottom(proxy: proxy)
-                        }
-                    }
-                }
+            }
         }
     }
     
@@ -261,6 +270,9 @@ struct MessageListView: View {
     
     @MainActor
     private func scrollToBottom(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {
+        if isTouching {
+            return
+        }
         proxy.scrollTo(bottomID, anchor: anchor)
     }
     
@@ -274,7 +286,7 @@ struct MessageListView: View {
         if session.input.hasPrefix("/") {
             VStack(alignment: .leading, spacing: 0) {
                 Spacer()
-                ScrollViewReader { promptListProxy in
+                ScrollViewReader { _ in
                     List(selection: $selectedPromptIndex) {
                         if prompts.isEmpty {
                             Text("No Result")

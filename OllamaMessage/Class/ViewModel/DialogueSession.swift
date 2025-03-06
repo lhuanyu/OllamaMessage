@@ -5,15 +5,13 @@
 //  Created by LuoHuanyu on 2023/3/3.
 //
 
+import AudioToolbox
 import Foundation
 import SwiftUI
 import SwiftUIX
-import AudioToolbox
 
 class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Codable {
-    
     struct Configuration: Codable {
-        
         var key: String {
             AppConfiguration.shared.key
         }
@@ -35,10 +33,9 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             temperature = AppConfiguration.shared.temperature
             systemPrompt = AppConfiguration.shared.systemPrompt
         }
-        
     }
     
-    //MARK: - Codable
+    // MARK: - Codable
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -73,7 +70,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         case id
     }
     
-    //MARK: - Hashable, Equatable
+    // MARK: - Hashable, Equatable
 
     static func == (lhs: DialogueSession, rhs: DialogueSession) -> Bool {
         lhs.id == rhs.id
@@ -87,7 +84,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     
     var rawData: DialogueData?
     
-    //MARK: - State
+    // MARK: - State
     
     @Published var isReplying: Bool = false
     @Published var isSending: Bool = false
@@ -104,13 +101,22 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             }
         }
     }
+
     @Published var suggestions: [String] = []
     @Published var date = Date()
     
     private var initFinished = false
-    //MARK: - Properties
     
-    @Published var configuration: Configuration = Configuration() {
+    @MainActor func stop() {
+        hasCanceled = true
+        if isStreaming {
+            stopStreaming()
+        }
+    }
+
+    // MARK: - Properties
+    
+    @Published var configuration: Configuration = .init() {
         didSet {
             service.configuration = configuration
             save()
@@ -123,11 +129,9 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         
     lazy var service = OllamaService(configuration: configuration)
     
-    init() {
-        
-    }
+    init() {}
     
-    //MARK: - Message Actions
+    // MARK: - Message Actions
     
     @MainActor
     func send(scroll: ((UnitPoint) -> Void)? = nil) async {
@@ -162,6 +166,8 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     }
     
     private var lastConversationData: ConversationData?
+    
+    private var hasCanceled = false
     
     @MainActor
     private func send(text: String, data: Data? = nil, isRetry: Bool = false, scroll: ((UnitPoint) -> Void)? = nil) async {
@@ -204,33 +210,39 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 scroll?(.bottom)
             }
             
+            if hasCanceled {
+                hasCanceled = false
+                return
+            }
+            
             let stream = try await service.sendMessage(text, data: data)
             isStreaming = true
             AudioServicesPlaySystemSound(1301)
             for try await text in stream {
                 streamText += text
                 conversation.reply = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                conversations[conversations.count - 1] = conversation
+                conversations[conversations.count-1] = conversation
 
                 withAnimation {
-                    scroll?(.top)///for an issue of iOS 16
-                    scroll?(.bottom)
+                    if #available(iOS 17, *) {
+                        scroll?(.bottom)
+                    } else {
+                        scroll?(.top) /// for an issue of iOS 16
+                        scroll?(.bottom)
+                    }
                 }
-
             }
             
             lastConversationData?.sync(with: conversation)
             isStreaming = false
             createSuggestions(scroll: scroll)
         } catch {
-
             withAnimation {
                 isStreaming = false
                 conversation.errorDesc = error.localizedDescription
                 lastConversationData?.sync(with: conversation)
                 scroll?(.bottom)
             }
-
         }
 
         withAnimation {
@@ -240,7 +252,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             scroll?(.bottom)
             save()
         }
-
     }
     
     @MainActor
@@ -259,29 +270,30 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 print(suggestions)
 
                 withAnimation {
+                    if self.isReplying {
+                        return
+                    }
                     self.suggestions = suggestions
                 }
                 withAnimation(after: .milliseconds(250)) {
                     scroll?(.bottom)
                 }
 
-            } catch let error {
+            } catch {
                 print(error)
             }
         }
     }
-
 }
 
-
 extension DialogueSession {
-    
     convenience init?(rawData: DialogueData) {
         self.init()
         guard let id = rawData.id,
               let date = rawData.date,
               let configurationData = rawData.configuration,
-              let conversations = rawData.conversations as? Set<ConversationData> else {
+              let conversations = rawData.conversations as? Set<ConversationData>
+        else {
             return nil
         }
         self.rawData = rawData
@@ -294,7 +306,8 @@ extension DialogueSession {
         self.conversations = conversations.compactMap { data in
             if let id = data.id,
                let input = data.input,
-               let date = data.date {
+               let date = data.date
+            {
                 let conversation = Conversation(
                     id: id,
                     input: input,
@@ -302,8 +315,7 @@ extension DialogueSession {
                     reply: data.reply,
                     replyData: data.replyData,
                     errorDesc: data.errorDesc,
-                    date: date
-                )
+                    date: date)
                 return conversation
             } else {
                 return nil
@@ -313,10 +325,10 @@ extension DialogueSession {
             $0.date < $1.date
         }
         
-        self.conversations.forEach {
-            self.service.appendNewMessage(
-                input: $0.inputType.isImage ? "An image" : $0.input,
-                reply: $0.replyType.isImage ? "An image" : $0.reply ?? "")
+        for conversation in self.conversations {
+            service.appendNewMessage(
+                input: conversation.inputType.isImage ? "An image" : conversation.input,
+                reply: conversation.replyType.isImage ? "An image" : conversation.reply ?? "")
         }
         if !self.conversations.isEmpty {
             self.conversations[self.conversations.endIndex-1].isLast = true
@@ -337,7 +349,7 @@ extension DialogueSession {
         
         do {
             try PersistenceController.shared.save()
-        } catch let error {
+        } catch {
             print(error.localizedDescription)
         }
         
@@ -345,7 +357,7 @@ extension DialogueSession {
     }
     
     func updateLastConversation(_ conversation: Conversation) {
-        conversations[conversations.count - 1] = conversation
+        conversations[conversations.count-1] = conversation
         lastConversationData?.sync(with: conversation)
     }
     
@@ -359,19 +371,20 @@ extension DialogueSession {
     func removeConversation(at index: Int) {
         let isLast = conversations.endIndex-1 == index
         let conversation = conversations.remove(at: index)
-        if isLast && !conversations.isEmpty {
+        if isLast, !conversations.isEmpty {
             conversations[conversations.endIndex-1].isLast = true
             suggestions.removeAll()
         }
         do {
             if let conversationsSet = rawData?.conversations as? Set<ConversationData>,
                let conversationData = conversationsSet.first(where: {
-                $0.id == conversation.id
-            }) {
+                   $0.id == conversation.id
+               })
+            {
                 PersistenceController.shared.container.viewContext.delete(conversationData)
             }
             try PersistenceController.shared.save()
-        } catch let error {
+        } catch {
             print(error.localizedDescription)
         }
     }
@@ -384,7 +397,7 @@ extension DialogueSession {
                 conversations.forEach(viewContext.delete)
             }
             try PersistenceController.shared.save()
-        } catch let error {
+        } catch {
             print(error.localizedDescription)
         }
     }
@@ -397,16 +410,13 @@ extension DialogueSession {
             rawData?.date = date
             rawData?.configuration = try JSONEncoder().encode(configuration)
             try PersistenceController.shared.save()
-        } catch let error {
+        } catch {
             print(error.localizedDescription)
         }
     }
-    
-    
 }
 
 extension ConversationData {
-    
     func sync(with conversation: Conversation) {
         id = conversation.id
         date = conversation.date
@@ -417,9 +427,8 @@ extension ConversationData {
         errorDesc = conversation.errorDesc
         do {
             try PersistenceController.shared.save()
-        } catch let error {  
+        } catch {
             print(error.localizedDescription)
         }
     }
-    
 }
