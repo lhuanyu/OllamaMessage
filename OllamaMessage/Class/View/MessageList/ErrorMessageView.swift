@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct ErrorMessageView: View {
-    
     var error: String?
     var retryHandler: (() -> Void)?
-    
+
     var body: some View {
         if let error = error {
             Text("Error: \(error)")
@@ -23,7 +22,7 @@ struct ErrorMessageView: View {
                 Text("Regenerate response")
             }
             .foregroundColor(.accentColor)
-            .padding([.top,.bottom])
+            .padding([.top, .bottom])
         }
     }
 }

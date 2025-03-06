@@ -5,8 +5,8 @@
 //  Created by LuoHuanyu on 2023/3/20.
 //
 
-import UIKit
 import Combine
+import UIKit
 
 /// Publisher to read keyboard changes.
 public protocol KeyboardReadable {
@@ -15,8 +15,8 @@ public protocol KeyboardReadable {
     var keyboardHeight: AnyPublisher<CGFloat, Never> { get }
 }
 
-extension KeyboardReadable {
-    public var keyboardWillChangePublisher: AnyPublisher<Bool, Never> {
+public extension KeyboardReadable {
+    var keyboardWillChangePublisher: AnyPublisher<Bool, Never> {
         Publishers.Merge(
             NotificationCenter.default
                 .publisher(for: UIResponder.keyboardWillShowNotification)
@@ -27,8 +27,8 @@ extension KeyboardReadable {
         )
         .eraseToAnyPublisher()
     }
-    
-    public var keyboardDidChangePublisher: AnyPublisher<Bool, Never> {
+
+    var keyboardDidChangePublisher: AnyPublisher<Bool, Never> {
         Publishers.Merge(
             NotificationCenter.default
                 .publisher(for: UIResponder.keyboardDidShowNotification)
@@ -39,14 +39,15 @@ extension KeyboardReadable {
         )
         .eraseToAnyPublisher()
     }
-    
-    public var keyboardHeight: AnyPublisher<CGFloat, Never> {
+
+    var keyboardHeight: AnyPublisher<CGFloat, Never> {
         NotificationCenter
             .default
             .publisher(for: UIResponder.keyboardDidShowNotification)
             .map { notification in
                 if let keyboardFrame: NSValue = notification
-                    .userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                    .userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
+                {
                     let keyboardRectangle = keyboardFrame.cgRectValue
                     let keyboardHeight = keyboardRectangle.height
                     return keyboardHeight

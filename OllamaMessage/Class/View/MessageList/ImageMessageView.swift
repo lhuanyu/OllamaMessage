@@ -5,18 +5,17 @@
 //  Created by LuoHuanyu on 2023/4/6.
 //
 
-import SwiftUI
 import Kingfisher
+import SwiftUI
 
 struct ImageMessageView: View {
-    
     var url: URL?
-    
+
     var body: some View {
         KFImage(url)
             .resizable()
             .fade(duration: 0.25)
-            .placeholder { p in
+            .placeholder { _ in
                 ProgressView()
             }
             .cacheOriginalImage()

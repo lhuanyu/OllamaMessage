@@ -5,12 +5,10 @@
 //  Created by LuoHuanyu on 2023/3/16.
 //
 
-
 import SwiftUI
 
-
 struct BubbleShape: Shape {
-    var myMessage : Bool
+    var myMessage: Bool
     func path(in rect: CGRect) -> Path {
         let width = rect.width
         let height = rect.height
@@ -44,7 +42,6 @@ struct BubbleShape: Shape {
             bezierPath.addCurve(to: CGPoint(x: width - 20, y: height), controlPoint1: CGPoint(x: width - 15, y: height), controlPoint2: CGPoint(x: width - 20, y: height))
         }
         return Path(bezierPath.cgPath)
-        
     }
 }
 
@@ -55,7 +52,6 @@ extension View {
 }
 
 struct Bubble: ViewModifier {
-    
     var isMyMessage: Bool
     
     var type: MessageType = .text
@@ -95,7 +91,6 @@ struct Bubble: ViewModifier {
                     .foregroundColor(.primary)
             }
         }
-        
     }
     
     private var replyBackgroundColor: Color {
@@ -104,8 +99,6 @@ struct Bubble: ViewModifier {
     
     @Environment(\.colorScheme) var colorScheme
 }
-
-
 
 #Preview {
     VStack {
@@ -123,8 +116,6 @@ struct Bubble: ViewModifier {
         }
         .padding(.leading, 55).padding(.vertical, 10)
         
-        
-        
         HStack {
             Text("You can quote them, disagree with them, glorify or vilify them, but the only thing you can’t do is ignore them because they change things…")
                 .bubbleStyle(isMyMessage: false)
@@ -138,7 +129,6 @@ struct Bubble: ViewModifier {
             Spacer()
         }
         .padding(.trailing, 55).padding(.vertical, 10)
-        
         
     }.padding(.horizontal, 15)
 }

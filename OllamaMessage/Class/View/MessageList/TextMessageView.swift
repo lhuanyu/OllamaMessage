@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct TextMessageView: View {
-    
     var think: String?
     var text: String
     var isReplying: Bool
-    
+
     var body: some View {
         if AppConfiguration.shared.isMarkdownEnabled {
             MessageMarkdownView(
@@ -20,7 +19,7 @@ struct TextMessageView: View {
                 text: text,
                 isReplying: isReplying
             )
-                .textSelection(.enabled)
+            .textSelection(.enabled)
         } else {
             if text.isEmpty {
                 EmptyView()

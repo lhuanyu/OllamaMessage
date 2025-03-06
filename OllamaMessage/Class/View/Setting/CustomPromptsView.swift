@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CustomPromptsView: View {
-    
     @State var showAddPromptView = false
     @ObservedObject var manager = PromptManager.shared
     
@@ -94,7 +93,7 @@ struct CustomPromptsView: View {
                         .bold()
                     Spacer()
                     TextField("Type a prompt", text: $prompt, axis: .vertical)
-                        .lineLimit(1...30)
+                        .lineLimit(1 ... 30)
                 }
             }
             Section {
@@ -113,7 +112,6 @@ struct CustomPromptsView: View {
         }
     }
     
-    
     func addPrompt() {
         guard !name.isEmpty && !prompt.isEmpty else {
             return
@@ -122,7 +120,6 @@ struct CustomPromptsView: View {
             manager.addCustomPrompt(.init(cmd: name.convertToSnakeCase(), act: name, prompt: prompt, tags: []))
         }
     }
-    
 }
 
 #Preview {

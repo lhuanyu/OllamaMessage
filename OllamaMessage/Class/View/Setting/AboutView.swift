@@ -14,7 +14,7 @@ struct AboutView: View {
                 .font(.title)
                 .bold()
                 .padding(.bottom)
-            ///App Icon Style
+            /// App Icon Style
             ZStack {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(Color.white)
@@ -31,7 +31,7 @@ struct AboutView: View {
                     )
             }
             .padding(.bottom)
-            ///Version
+            /// Version
             Text("\(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
         }
         .navigationTitle("About")

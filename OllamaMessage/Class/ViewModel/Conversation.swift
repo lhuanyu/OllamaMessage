@@ -13,14 +13,12 @@ enum MessageType {
     case imageData
     case error
     
-    
     var isImage: Bool {
         self == .image || self == .imageData
     }
 }
 
 struct Conversation: Identifiable, Codable, Equatable {
-    
     var id = UUID()
     
     var isReplying: Bool = false
@@ -116,15 +114,12 @@ struct Conversation: Identifiable, Codable, Equatable {
     }
 }
 
-
 extension String {
-    
     var base64ImageData: Data? {
         guard hasPrefix("![ImageData](data:image/png;base64,") else {
             return nil
         }
-        let base64 = String(self.deletingPrefix("![ImageData](data:image/png;base64,").dropLast())
+        let base64 = String(deletingPrefix("![ImageData](data:image/png;base64,").dropLast())
         return Data(base64Encoded: base64)
     }
-    
 }

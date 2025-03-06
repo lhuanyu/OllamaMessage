@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct PromptsListView: View {
-    
     @ObservedObject var manager = PromptManager.shared
     
     @State var selectedPrompt: Prompt?
@@ -45,7 +44,6 @@ struct PromptsListView: View {
                     } label: {
                         Text(prompt.act)
                     }
-
                 }
             }
         }
@@ -54,7 +52,6 @@ struct PromptsListView: View {
 }
 
 struct PromptDetailView: View {
-    
     let prompt: Prompt
     
     var body: some View {
@@ -64,7 +61,6 @@ struct PromptDetailView: View {
                     Image(systemName: "terminal.fill")
                     Text("/\(prompt.cmd)")
                 }
-                
             }
             Section("Prompt") {
                 Text(prompt.prompt)
@@ -73,7 +69,6 @@ struct PromptDetailView: View {
         }
         .navigationTitle(prompt.act)
     }
-    
 }
 
 #Preview {
@@ -81,7 +76,6 @@ struct PromptDetailView: View {
 }
 
 extension TimeInterval {
-    
     var date: Date {
         Date(timeIntervalSince1970: self)
     }
@@ -92,5 +86,4 @@ extension TimeInterval {
         }
         return String(localized: "Last updated on \(date.dateTimeString())")
     }
-    
 }

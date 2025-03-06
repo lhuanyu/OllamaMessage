@@ -5,25 +5,26 @@
 //  Created by LuoHuanyu on 2023/3/22.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \DialogueData.date, ascending: false)],
-        animation: .default)
+        animation: .default
+    )
     private var items: FetchedResults<DialogueData>
-    
+
     @StateObject var configuration = AppConfiguration.shared
     @State var dialogueSessions: [DialogueSession] = []
     @State var selectedDialogueSession: DialogueSession?
-    
+
     @State var isShowSettingView = false
-    
+
     @State var isReplying = false
-    
+
     @State private var columnVisibility = NavigationSplitViewVisibility.doubleColumn
 
     var body: some View {
@@ -48,7 +49,7 @@ struct ContentView: View {
         } detail: {
             ZStack {
                 if let selectedDialogueSession = selectedDialogueSession {
-                    MessageListView(session:selectedDialogueSession)
+                    MessageListView(session: selectedDialogueSession)
                         .onReceive(selectedDialogueSession.$isReplying.didSet) { isReplying in
                             self.isReplying = isReplying
                         }
@@ -87,14 +88,13 @@ struct ContentView: View {
                 OllamaModelSelectionView(selectedModelName: $selectedModelName)
                     .presentationDetents([.medium, .large])
             }
-            
         }
         .onChange(of: selectedModelName) { name in
             if let name = name {
                 addItem(modelName: name)
             }
         }
-        .onAppear() {
+        .onAppear {
             dialogueSessions = items.compactMap {
                 DialogueSession(rawData: $0)
             }
@@ -104,11 +104,8 @@ struct ContentView: View {
                 await OllamaConfiguration.shared.fetchModels()
             }
         }
-
-
     }
-    
-    
+
     @ViewBuilder
     func contentView() -> some View {
         if dialogueSessions.isEmpty {
@@ -125,12 +122,10 @@ struct ContentView: View {
             }
         }
     }
-    
-    
-    @State private var showModelPicker = false
-    
-    @State private var selectedModelName: String?
 
+    @State private var showModelPicker = false
+
+    @State private var selectedModelName: String?
 
     private func addItem(modelName: String? = nil) {
         withAnimation {
@@ -143,7 +138,7 @@ struct ContentView: View {
                 let newItem = DialogueData(context: viewContext)
                 newItem.id = session.id
                 newItem.date = session.date
-                newItem.configuration =  try JSONEncoder().encode(session.configuration)
+                newItem.configuration = try JSONEncoder().encode(session.configuration)
                 try PersistenceController.shared.save()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     selectedDialogueSession = session
@@ -172,7 +167,7 @@ struct ContentView: View {
             }
         }
     }
-    
+
     private func deleteItem(_ session: DialogueSession) {
         withAnimation {
             dialogueSessions.removeAll {
@@ -192,5 +187,4 @@ struct ContentView: View {
             }
         }
     }
-    
 }

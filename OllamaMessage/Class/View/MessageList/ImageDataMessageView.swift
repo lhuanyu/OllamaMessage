@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct ImageDataMessageView: View {
-    
     var data: Data?
-    
+
     var body: some View {
         if let data = data {
             Image(data: data)?

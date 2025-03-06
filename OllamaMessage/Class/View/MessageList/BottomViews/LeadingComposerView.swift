@@ -5,11 +5,10 @@
 //  Created by LuoHuanyu on 2023/3/17.
 //
 
-import SwiftUI
 import PhotosUI
+import SwiftUI
 
 struct LeadingComposerView: View {
-    
     @ObservedObject var session: DialogueSession
     
     @State var selectedPromt: Prompt?
@@ -22,7 +21,6 @@ struct LeadingComposerView: View {
     
     @Binding var isLoading: Bool
 
-    
     private var height: CGFloat {
         22
     }
@@ -63,17 +61,13 @@ struct LeadingComposerView: View {
                 }
             }
         }
-        
     }
-    
 }
 
 extension Data {
-    
     var imageBased64String: String {
         "data:image/png;base64,\(base64EncodedString()))"
     }
-    
 }
 
 struct LeadingComposerView_Previews: PreviewProvider {
@@ -90,7 +84,6 @@ struct LeadingComposerView_Previews: PreviewProvider {
             Capsule()
                 .stroke(.gray, lineWidth: 2)
                 .frame(maxHeight: 50)
-            
         }
         .preferredColorScheme(.dark)
         .previewLayout(.fixed(width: 400.0, height: 100.0))

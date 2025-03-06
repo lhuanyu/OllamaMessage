@@ -23,6 +23,7 @@ struct Prompt: Codable, Identifiable, Hashable, Equatable {
     var id: String {
         cmd
     }
+
     let cmd: String
     let act: String
     let prompt: String
@@ -34,7 +35,6 @@ struct Prompt: Codable, Identifiable, Hashable, Equatable {
 }
 
 final class PromptManager: ObservableObject, @unchecked Sendable {
-    
     static let shared = PromptManager()
     
     @Published private(set) var prompts: [Prompt] = []
@@ -54,7 +54,7 @@ final class PromptManager: ObservableObject, @unchecked Sendable {
             let data = try JSONEncoder().encode(customPrompts)
             try data.write(to: customFileURL, options: .atomic)
             print("[Prompt Manager] Write user custom prompts to \(customFileURL).")
-        } catch let error  {
+        } catch {
             print(error.localizedDescription)
         }
     }
@@ -90,7 +90,8 @@ final class PromptManager: ObservableObject, @unchecked Sendable {
             return data
         }
         if let path = Bundle.main.path(forResource: "chatgpt_prompts", ofType: "json"),
-           let data = try? Data(contentsOf: URL(fileURLWithPath: path)) {
+           let data = try? Data(contentsOf: URL(fileURLWithPath: path))
+        {
             return data
         }
         return nil
@@ -98,7 +99,8 @@ final class PromptManager: ObservableObject, @unchecked Sendable {
     
     private func loadCachedPrompts() {
         if let data = jsonData(),
-           let prompts = try? JSONDecoder().decode([Prompt].self, from: data) {
+           let prompts = try? JSONDecoder().decode([Prompt].self, from: data)
+        {
             syncedPrompts = prompts
             syncedPrompts.removeDuplicates()
             print("[Prompt Manager] Load cached prompts. Count: \(syncedPrompts.count).")
@@ -107,7 +109,8 @@ final class PromptManager: ObservableObject, @unchecked Sendable {
     
     private func loadCustomPrompts() {
         guard let data = try? Data(contentsOf: customFileURL),
-              let prompts = try? JSONDecoder().decode([Prompt].self, from: data) else {
+              let prompts = try? JSONDecoder().decode([Prompt].self, from: data)
+        else {
             return
         }
         customPrompts = prompts
@@ -143,13 +146,14 @@ final class PromptManager: ObservableObject, @unchecked Sendable {
         do {
             let csv: CSV = try CSV<Named>(url: url)
             var prompts = [Prompt]()
-            try csv.enumerateAsDict({ dic in
+            try csv.enumerateAsDict { dic in
                 if let act = dic["act"],
-                   let prompt = dic["prompt"] {
+                   let prompt = dic["prompt"]
+                {
                     let cmd = act.convertToSnakeCase()
                     prompts.append(.init(cmd: cmd, act: act, prompt: prompt, tags: ["chatgpt-prompts"]))
                 }
-            })
+            }
             syncedPrompts = prompts
             syncedPrompts.removeDuplicates()
             mergePrompts()
@@ -161,7 +165,7 @@ final class PromptManager: ObservableObject, @unchecked Sendable {
             lastSyncAt = Date().timeIntervalSince1970
         } catch let error as CSVParseError {
             print(error.localizedDescription)
-        } catch let error  {
+        } catch {
             print(error.localizedDescription)
         }
     }
@@ -173,14 +177,11 @@ final class PromptManager: ObservableObject, @unchecked Sendable {
     private var customFileURL: URL {
         URL.documentsDirectory.appendingPathComponent("custom_prompts.json")
     }
-    
 }
 
-
 extension String {
-    
     func convertToSnakeCase() -> String {
-        let lowercaseInput = self.lowercased()
+        let lowercaseInput = lowercased()
         let separatorSet = CharacterSet(charactersIn: "- ")
         let replaced = lowercaseInput
             .replacingOccurrences(of: "`", with: "")
@@ -188,20 +189,16 @@ extension String {
             .joined(separator: "_")
         return replaced
     }
-
 }
 
 extension URL {
-    
     // Get user's documents directory path
     static func documentDirectoryPath() -> URL {
         let arrayPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let docDirectoryPath = arrayPaths[0]
         return docDirectoryPath
     }
-    
 }
-
 
 extension Array where Element: Hashable {
     @discardableResult
@@ -214,5 +211,4 @@ extension Array where Element: Hashable {
         }
         return self
     }
-    
 }

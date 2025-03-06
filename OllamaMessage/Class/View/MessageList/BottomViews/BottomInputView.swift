@@ -9,17 +9,16 @@ import SwiftUI
 import SwiftUIX
 
 struct BottomInputView: View {
-    
     @ObservedObject var session: DialogueSession
     @Binding var isLoading: Bool
     @Environment(\.colorScheme) var colorScheme
 
     let namespace: Namespace.ID
-    
+
     @FocusState var isTextFieldFocused: Bool
-        
+
     var send: (String) -> Void
-        
+
     var body: some View {
         HStack(alignment: .bottom) {
             LeadingComposerView(session: session, isLoading: $isLoading)
@@ -38,7 +37,7 @@ struct BottomInputView: View {
             }
         }
         .padding([.top, .bottom], 6)
-        .background{
+        .background {
             if colorScheme == .light {
                 BlurEffectView(style: .light)
                     .edgesIgnoringSafeArea(.bottom)
@@ -48,11 +47,8 @@ struct BottomInputView: View {
             }
         }
     }
-    
-    
+
     private let leadingComposerDelta: CGFloat = 17
-    
-    
 }
 
 @available(iOS 17.0, macOS 14.0, *)
@@ -60,8 +56,6 @@ struct BottomInputView: View {
     @Previewable @Namespace var namespace
     VStack {
         Spacer()
-        BottomInputView(session: DialogueSession(), isLoading: .constant(false),namespace: namespace, send: { _ in })
+        BottomInputView(session: DialogueSession(), isLoading: .constant(false), namespace: namespace, send: { _ in })
     }
-
-        
 }

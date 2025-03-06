@@ -7,7 +7,7 @@
 
 import Foundation
 
-//{
+// {
 //  "models": [
 //    {
 //      "name": "codellama:13b",
@@ -36,14 +36,13 @@ import Foundation
 //      }
 //    }
 //  ]
-//}
+// }
 
 struct OllamaModelResponse: Codable {
     let models: [OllamaModel]
 }
 
 struct OllamaModel: Codable, Identifiable {
-    
     struct Details: Codable {
         let format: String
         let family: String
@@ -51,19 +50,18 @@ struct OllamaModel: Codable, Identifiable {
         let parameterSize: String
         let quantizationLevel: String
     }
-    
+
     var id: String { name }
-    
-    
+
     let name: String
     let modifiedAt: String
     let size: Int
     let digest: String
     let details: Details
-    
+
     static let none = OllamaModel(name: "None", modifiedAt: "", size: 0, digest: "", details: .init(format: "", family: "", families: nil, parameterSize: "", quantizationLevel: ""))
-    
 }
+
 // 请求体模型
 struct OllamaChatRequest: Codable {
     let model: String
@@ -71,7 +69,7 @@ struct OllamaChatRequest: Codable {
     var stream: Bool?
     var system: String?
     var options: Options?
-    
+
     struct Options: Codable {
         let temperature: Double
         let num_ctx: Int
@@ -79,7 +77,7 @@ struct OllamaChatRequest: Codable {
 }
 
 // Chat response
-//{
+// {
 //  "model": "llama3.2",
 //  "created_at": "2023-08-04T08:52:19.385406455-07:00",
 //  "message": {
@@ -88,7 +86,7 @@ struct OllamaChatRequest: Codable {
 //    "images": null
 //  },
 //  "done": false
-//}
+// }
 
 struct OllamaResponse: Codable {
     let model: String
@@ -97,8 +95,8 @@ struct OllamaResponse: Codable {
     let done: Bool
 }
 
-//Chat Final Response
-//{
+// Chat Final Response
+// {
 //  "model": "llama3.2",
 //  "created_at": "2023-08-04T19:22:45.499127Z",
 //  "done": true,
@@ -108,7 +106,7 @@ struct OllamaResponse: Codable {
 //  "prompt_eval_duration": 342546000,
 //  "eval_count": 282,
 //  "eval_duration": 4535599000
-//}
+// }
 
 struct OllamaFinalResponse: Codable {
     let model: String
@@ -121,4 +119,3 @@ struct OllamaFinalResponse: Codable {
     let evalCount: Int
     let evalDuration: Int
 }
-

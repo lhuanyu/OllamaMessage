@@ -36,7 +36,6 @@ extension TextOutputFormat {
             self.accumulatedText.append(Text(token)
                 .foregroundColor(.init(uiColor: color))
             )
-            
         }
         
         mutating func addPlainText(_ text: String) {
@@ -56,7 +55,6 @@ extension TextOutputFormat {
     }
 }
 
-
 struct SplashCodeSyntaxHighlighter: CodeSyntaxHighlighter {
     private let syntaxHighlighter: SyntaxHighlighter<TextOutputFormat>
     
@@ -65,10 +63,6 @@ struct SplashCodeSyntaxHighlighter: CodeSyntaxHighlighter {
     }
     
     func highlightCode(_ content: String, language: String?) -> Text {
-//        guard language?.lowercased() == "swift" else {
-//            return Text(content)
-//        }
-//        
         return self.syntaxHighlighter.highlight(content)
     }
 }

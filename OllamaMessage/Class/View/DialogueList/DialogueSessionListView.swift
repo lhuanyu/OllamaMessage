@@ -89,7 +89,7 @@ struct DialogueSessionListView: View {
             updateList()
         }
     }
-    
+
     private func secondaryTextColor(_ session: DialogueSession) -> Color {
 #if targetEnvironment(macCatalyst)
         return selectedDialogueSession == session ? Color.systemGray5 : .secondary

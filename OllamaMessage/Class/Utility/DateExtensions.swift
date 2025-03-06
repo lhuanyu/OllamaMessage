@@ -86,6 +86,4 @@ extension Date {
         dateFormatter.dateStyle = .none
         return dateFormatter.string(from: self)
     }
-    
-    
 }

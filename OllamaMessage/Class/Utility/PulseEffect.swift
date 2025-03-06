@@ -27,6 +27,6 @@ struct PulseEffect: ViewModifier {
 
 extension View {
     func pulse() -> some View {
-        self.modifier(PulseEffect())
+        modifier(PulseEffect())
     }
 }

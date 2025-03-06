@@ -9,23 +9,22 @@ import SwiftUI
 
 @main
 struct OllamaMessageApp: App {
-    
     let persistenceController = PersistenceController.shared
-    
+
     @State var showOllamaHostAlert = false
-            
+
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .onAppear() {
+                .onAppear {
                     if AppConfiguration.shared.ollamaAPIHost.isEmpty {
                         showOllamaHostAlert = true
                     }
                 }
                 .alert("Enter Ollama API Host", isPresented: $showOllamaHostAlert) {
                     TextField("Ollama API Host", text: AppConfiguration.shared.$ollamaAPIHost)
-                    Button("Later", role: .cancel) { }
-                    Button("Confirm", role: .none) { }
+                    Button("Later", role: .cancel) {}
+                    Button("Confirm", role: .none) {}
                 } message: {
                     Text("You need set Ollama API host before start a conversation.")
                 }

@@ -118,7 +118,6 @@ final class OllamaService: @unchecked Sendable {
                     do {
                         var responseContent = ""
                         for try await line in bytes.lines {
-
                             if Task.isCancelled {
                                 print("Streaming cancelled")
                                 continuation.finish()
@@ -202,7 +201,6 @@ final class OllamaService: @unchecked Sendable {
 }
 
 extension String {
-    
     func deletingPrefix(_ prefix: String) -> String {
         guard hasPrefix(prefix) else { return self }
         return String(dropFirst(prefix.count))
