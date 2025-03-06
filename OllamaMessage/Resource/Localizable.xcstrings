@@ -597,12 +597,12 @@
         }
       }
     },
-    "Select a model to use for generating replies. Models with the eye icon are vision models." : {
+    "Select a model to use for generating replies. Models with the eye icon are vision models and models with the brain icon are reasoning models." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "选择一个模型用于生成回复。带有眼睛图标的模型是视觉模型。"
+            "value" : " 选择一个模型用于生成回复。带有眼睛图标的是视觉模型，带有大脑图标的是推理模型。"
           }
         }
       }

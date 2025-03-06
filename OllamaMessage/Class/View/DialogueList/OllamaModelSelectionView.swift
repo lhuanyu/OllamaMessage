@@ -34,6 +34,10 @@ struct OllamaModelSelectionView: View {
                                 Image(systemName: "eye")
                                     .foregroundColor(.accentColor)
                             }
+                            if model.name.ollamaModelProvider.isReasoningModel {
+                                Image(systemName: "brain")
+                                    .foregroundColor(.accentColor)
+                            }
                         }
                         .contentShape(Rectangle())
                         .onTapGesture {
@@ -42,7 +46,7 @@ struct OllamaModelSelectionView: View {
                         }
                     }
                 } footer: {
-                    Text("Select a model to use for generating replies. Models with the eye icon are vision models.")
+                    Text("Select a model to use for generating replies. Models with the eye icon are vision models and models with the brain icon are reasoning models.")
                         .font(.caption)
                 }
             }
