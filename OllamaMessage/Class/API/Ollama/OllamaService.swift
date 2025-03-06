@@ -16,9 +16,27 @@ final class OllamaService: @unchecked Sendable {
         
     var messages = [Message]()
     
-    func createTitle() async throws -> String {
-        let prompt = "Generate a title based on the conversation, it should be a short sentence, return the title only."
-        return try await chat(prompt)
+    func createTitle() async throws -> String? {
+        guard !AppConfiguration.shared.suggestionsModel.isEmpty else {
+            return nil
+        }
+        
+        guard !messages.isEmpty else {
+            return nil
+        }
+        
+        let chatHistory = messages.reduce("") { $0 + "[\($1.role)]:\($1.content)" + "\n" }
+        let prompt = """
+        There is a conversation between a user and an assistant. The conversation is as follows: \n\(chatHistory)\n
+        - Generate a title which summarizes the conversation above.
+        - The title should use the same language of the locale '\(Locale.current)'. 
+        - The title should be short and unique.
+        - Return the title only, do not use markdown syntax, do not use quotes.
+        """
+
+        let title = try await chat(prompt, model: AppConfiguration.shared.suggestionsModel, includingHistory: false)
+        print("Title: \(title)")
+        return title
     }
         
     private var suggestionsCount: Int {
@@ -172,7 +190,11 @@ final class OllamaService: @unchecked Sendable {
             let chatRequest = OllamaChatRequest(
                 model: model ?? configuration.model,
                 messages: includingHistory ? messages + [Message(role: "user", content: input)] : [Message(role: "user", content: input)],
-                stream: false
+                stream: false,
+                options: .init(
+                    temperature: configuration.temperature,
+                    num_ctx: 4096
+                )
             )
             
             guard let url = URL(string: AppConfiguration.shared.ollamaAPIHost + "/api/chat") else {

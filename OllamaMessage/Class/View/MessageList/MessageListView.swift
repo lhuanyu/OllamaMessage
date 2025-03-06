@@ -212,6 +212,9 @@ struct MessageListView: View {
             }
             .onAppear {
                 scrollToBottom(proxy: proxy)
+                if session.title == nil {
+                    session.createTitle()
+                }
                 if session.suggestions.isEmpty {
                     session.createSuggestions {
                         scrollToBottom(proxy: proxy, anchor: $0)

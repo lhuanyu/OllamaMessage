@@ -43,6 +43,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         conversations = try container.decode([Conversation].self, forKey: .conversations)
         date = try container.decode(Date.self, forKey: .date)
         id = try container.decode(UUID.self, forKey: .id)
+        title = try container.decode(String.self, forKey: .title)
         let messages = try container.decode([Message].self, forKey: .messages)
 
         isReplying = false
@@ -60,6 +61,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         try container.encode(service.messages, forKey: .messages)
         try container.encode(id, forKey: .id)
         try container.encode(date, forKey: .date)
+        try container.encode(title, forKey: .title)
     }
     
     enum CodingKeys: CodingKey {
@@ -68,6 +70,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         case messages
         case date
         case id
+        case title
     }
     
     // MARK: - Hashable, Equatable
@@ -93,7 +96,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     @Published var input: String = ""
     @Published var inputData: Data?
     @Published var sendingData: Data?
-    @Published var title: String = "New Chat"
+    @Published var title: String?
     @Published var conversations: [Conversation] = [] {
         didSet {
             if let date = conversations.last?.date {
@@ -151,7 +154,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     @MainActor
     func clearMessages() {
         service.removeAllMessages()
-        title = "Empty"
+        title = nil
         withAnimation { [weak self] in
             self?.removeAllConversations()
             self?.suggestions.removeAll()
@@ -220,7 +223,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             AudioServicesPlaySystemSound(1301)
             for try await text in stream {
                 streamText += text
-                conversation.reply = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                conversation.reply = streamText
                 conversations[conversations.count-1] = conversation
 
                 withAnimation {
@@ -235,6 +238,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             
             lastConversationData?.sync(with: conversation)
             isStreaming = false
+            createTitle()
             createSuggestions(scroll: scroll)
         } catch {
             withAnimation {
@@ -260,14 +264,29 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     }
     
     @MainActor
+    func createTitle() {
+        Task { @MainActor in
+            do {
+                if let title = try await service.createTitle() {
+                    withoutAnimation {
+                        self.title = title
+                        self.save()
+                    }
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    @MainActor
     func createSuggestions(scroll: ((UnitPoint) -> Void)? = nil) {
         guard AppConfiguration.shared.isReplySuggestionsEnabled else {
             return
         }
-        Task {
+        Task { @MainActor in
             do {
                 let suggestions = try await service.createSuggestions()
-                print(suggestions)
 
                 withAnimation {
                     if self.isReplying {
@@ -299,6 +318,7 @@ extension DialogueSession {
         self.rawData = rawData
         self.id = id
         self.date = date
+        title = rawData.title
         if let configuration = try? JSONDecoder().decode(Configuration.self, from: configurationData) {
             self.configuration = configuration
         }
@@ -408,6 +428,7 @@ extension DialogueSession {
         }
         do {
             rawData?.date = date
+            rawData?.title = title
             rawData?.configuration = try JSONEncoder().encode(configuration)
             try PersistenceController.shared.save()
         } catch {

@@ -41,7 +41,7 @@ struct Conversation: Identifiable, Codable, Equatable {
         if let errorDesc = errorDesc {
             return errorDesc
         }
-        if reply == nil {
+        if reply == nil || reply?.isEmpty == true {
             return inputPreview
         }
         if replyType == .image || replyType == .imageData {
