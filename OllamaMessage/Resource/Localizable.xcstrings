@@ -178,6 +178,16 @@
         }
       }
     },
+    "Failed to fetch models: %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "获取模型失败： %@"
+          }
+        }
+      }
+    },
     "Failed to generate image." : {
       "extractionState" : "manual",
       "localizations" : {

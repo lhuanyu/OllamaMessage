@@ -18,12 +18,16 @@ class OllamaConfiguration: ObservableObject {
     
     @Published var isFetching = false
     
+    @Published var error: Error?
+    
     @MainActor
     func fetchModels() async {
         guard let url = URL(string: apiHost + "/api/tags") else {
             return
         }
         withAnimation {
+            error = nil
+            models = []
             isFetching = true
         }
         let request = URLRequest(url: url)
@@ -41,6 +45,10 @@ class OllamaConfiguration: ObservableObject {
             print(models)
         } catch {
             print(error)
+            withAnimation {
+                self.models = []
+                self.error = error
+            }
         }
         withAnimation {
             isFetching = false
@@ -71,6 +79,9 @@ struct OllamaSettingsView: View {
                     HStack {
                         ProgressView()
                     }
+                } else if let error = error {
+                    Text("Failed to fetch models: \(error.localizedDescription)")
+                        .foregroundColor(.red)
                 } else {
                     ForEach(models) { model in
                         HStack {
@@ -132,11 +143,15 @@ struct OllamaSettingsView: View {
     
     @State private var isFetching = true
     
+    @State private var error: Error?
+    
     func fetchModels() async {
         guard let url = URL(string: apiHost + "/api/tags") else {
             return
         }
         withAnimation {
+            error = nil
+            models = []
             isFetching = true
         }
         let request = URLRequest(url: url)
@@ -157,6 +172,7 @@ struct OllamaSettingsView: View {
             print(models)
         } catch {
             withAnimation {
+                self.error = error
                 isFetching = false
             }
             print(error)

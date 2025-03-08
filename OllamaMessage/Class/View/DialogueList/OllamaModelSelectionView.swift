@@ -21,33 +21,39 @@ struct OllamaModelSelectionView: View {
                 Section {
                     if OllamaConfiguration.shared.models.isEmpty && ollamaConfiguration.isFetching {
                         ProgressView()
-                    }
-                    ForEach(OllamaConfiguration.shared.models) { model in
-                        HStack {
-                            KFImage(model.name.ollamaModelProvider.iconURL)
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .scaledToFit()
-                            Text(model.name)
-                            Spacer()
-                            if model.name.ollamaModelProvider.isVisionModel {
-                                Image(systemName: "eye")
-                                    .foregroundColor(.accentColor)
+                    } else if let error = ollamaConfiguration.error {
+                        Text(error.localizedDescription)
+                            .foregroundStyle(.red)
+                    } else {
+                        ForEach(OllamaConfiguration.shared.models) { model in
+                            HStack {
+                                KFImage(model.name.ollamaModelProvider.iconURL)
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .scaledToFit()
+                                Text(model.name)
+                                Spacer()
+                                if model.name.ollamaModelProvider.isVisionModel {
+                                    Image(systemName: "eye")
+                                        .foregroundColor(.accentColor)
+                                }
+                                if model.name.ollamaModelProvider.isReasoningModel {
+                                    Image(systemName: "brain")
+                                        .foregroundColor(.accentColor)
+                                }
                             }
-                            if model.name.ollamaModelProvider.isReasoningModel {
-                                Image(systemName: "brain")
-                                    .foregroundColor(.accentColor)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                selectedModelName = model.name
+                                presentationMode.wrappedValue.dismiss()
                             }
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedModelName = model.name
-                            presentationMode.wrappedValue.dismiss()
                         }
                     }
                 } footer: {
-                    Text("Select a model to use for generating replies. Models with the eye icon are vision models and models with the brain icon are reasoning models.")
-                        .font(.caption)
+                    if !OllamaConfiguration.shared.models.isEmpty {
+                        Text("Select a model to use for generating replies. Models with the eye icon are vision models and models with the brain icon are reasoning models.")
+                            .font(.caption)
+                    }
                 }
             }
             .task {
