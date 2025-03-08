@@ -290,6 +290,9 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         Task { @MainActor in
             do {
                 let suggestions = try await service.createSuggestions()
+                if isReplying {
+                    return
+                }
                 withAnimation {
                     self.suggestions = suggestions
                 }
