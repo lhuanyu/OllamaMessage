@@ -242,7 +242,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             lastConversationData?.sync(with: conversation)
             isStreaming = false
             createTitle()
-            createSuggestions(scroll: scroll)
+            createSuggestions()
         } catch {
             withAnimation {
                 hasCanceled = false
@@ -283,7 +283,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     }
     
     @MainActor
-    func createSuggestions(scroll: ((UnitPoint) -> Void)? = nil) {
+    func createSuggestions() {
         guard AppConfiguration.shared.isReplySuggestionsEnabled else {
             return
         }
@@ -293,10 +293,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 withAnimation {
                     self.suggestions = suggestions
                 }
-                withAnimation(after: .milliseconds(250)) {
-                    scroll?(.bottom)
-                }
-
             } catch {
                 print(error)
             }

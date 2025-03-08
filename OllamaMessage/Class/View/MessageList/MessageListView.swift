@@ -190,9 +190,7 @@ struct MessageListView: View {
                     session.createTitle()
                 }
                 if session.suggestions.isEmpty {
-                    session.createSuggestions {
-                        scrollToBottom(proxy: proxy, anchor: $0)
-                    }
+                    session.createSuggestions()
                 }
                 if session.conversations.isEmpty {
                     isTextFieldFocused = true
@@ -201,9 +199,7 @@ struct MessageListView: View {
             .onChange(of: session) { session in
                 scrollToBottom(proxy: proxy)
                 if session.suggestions.isEmpty {
-                    session.createSuggestions {
-                        scrollToBottom(proxy: proxy, anchor: $0)
-                    }
+                    session.createSuggestions()
                 }
             }
             .onChange(of: selectedPromptIndex, perform: onSelectedPromptIndexChange)
