@@ -18,13 +18,14 @@ struct ConversationView: View {
     let namespace: Namespace.ID
     var lastConversationDate: Date?
     var isLastConversation: Bool = false
+    @Binding var isReplying: Bool
     let retryHandler: (Conversation) -> Void
     
     @State var isEditing = false
     @FocusState var isFocused: Bool
     @State var editingMessage: String = ""
     var deleteHandler: (() -> Void)?
-
+    
     var body: some View {
         VStack(spacing: 0) {
             dateView
@@ -66,7 +67,7 @@ struct ConversationView: View {
     }
     
     private var showRefreshButton: Bool {
-        !conversation.isReplying && conversation.isLast
+        !isReplying && conversation.isLast
     }
     
     @ViewBuilder
@@ -86,7 +87,7 @@ struct ConversationView: View {
                             Text("Copy")
                         }
                     }
-                    if !conversation.isReplying {
+                    if !isReplying {
                         Button(role: .destructive) {
                             deleteHandler?()
                         } label: {
@@ -133,7 +134,7 @@ struct ConversationView: View {
                                 }
                             }
                         }
-                        if !conversation.isReplying {
+                        if !isReplying {
                             Button(role: .destructive) {
                                 deleteHandler?()
                             } label: {
@@ -196,7 +197,7 @@ struct ConversationView: View {
     
     @ViewBuilder
     func messageEditButton() -> some View {
-        if conversation.isReplying || conversation.inputType.isImage {
+        if isReplying || conversation.inputType.isImage {
             EmptyView()
         } else {
             Button {
@@ -239,18 +240,18 @@ struct ConversationView: View {
                             TextMessageView(
                                 think: String(think),
                                 text: text,
-                                isReplying: conversation.isReplying && isLastConversation)
+                                isReplying: isReplying && isLastConversation)
                         } else if reply.hasPrefix("<think>") {
                             let think = reply.trimmingPrefix("<think>").trimmingCharacters(in: .whitespacesAndNewlines)
                             TextMessageView(
                                 think: String(think),
                                 text: "",
-                                isReplying: conversation.isReplying)
+                                isReplying: isReplying && isLastConversation)
                         } else {
-                            TextMessageView(text: reply, isReplying: conversation.isReplying && isLastConversation)
+                            TextMessageView(text: reply, isReplying: isReplying && isLastConversation)
                         }
                     } else {
-                        TextMessageView(text: "", isReplying: conversation.isReplying && isLastConversation)
+                        TextMessageView(text: "", isReplying: isReplying && isLastConversation)
                     }
                 case .image:
                     ImageMessageView(url: conversation.replyImageURL)
@@ -263,7 +264,7 @@ struct ConversationView: View {
                         retryHandler(conversation)
                     }
                 }
-                if conversation.isReplying {
+                if isReplying && isLastConversation {
                     ReplyingIndicatorView()
                         .frame(width: 48, height: 24)
                 }
@@ -277,7 +278,7 @@ struct ConversationView: View {
     
     @ViewBuilder
     var retryButton: some View {
-        if !conversation.isReplying {
+        if !isReplying {
             if conversation.errorDesc == nil && conversation.isLast {
                 Button {
                     retryHandler(conversation)
@@ -316,23 +317,23 @@ extension AnyTransition {
 
 struct MessageRowView_Previews: PreviewProvider {
     static let message = Conversation(
-        isReplying: true, isLast: false,
+        isLast: false,
         input: "What is SwiftUI?",
         reply: "SwiftUI is a user interface framework that allows developers to design and develop user interfaces for iOS, macOS, watchOS, and tvOS applications using Swift, a programming language developed by Apple Inc.")
     
     static let message2 = Conversation(
-        isReplying: false, isLast: false,
+        isLast: false,
         input: "What is SwiftUI?",
         reply: "",
         errorDesc: "OllamaMessage is currently not available")
     
     static let message3 = Conversation(
-        isReplying: true, isLast: false,
+        isLast: false,
         input: "What is SwiftUI?",
         reply: "")
     
     static let message4 = Conversation(
-        isReplying: false, isLast: true,
+        isLast: true,
         input: "What is SwiftUI?",
         reply: "SwiftUI is a user interface framework that allows developers to design and develop user interfaces for iOS, macOS, watchOS, and tvOS applications using Swift, a programming language developed by Apple Inc.",
         errorDesc: nil)
@@ -342,18 +343,33 @@ struct MessageRowView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             ScrollView {
-                ConversationView(conversation: message, namespace: animation, retryHandler: { _ in
+                ConversationView(
+                    conversation: message,
+                    namespace: animation,
+                    isReplying: .constant(false),
+                    retryHandler: { _ in
                     
-                })
-                ConversationView(conversation: message2, namespace: animation, retryHandler: { _ in
+                    })
+                ConversationView(
+                    conversation: message2,
+                    namespace: animation,
+                    isReplying: .constant(false),
+                    retryHandler: { _ in
                     
-                })
-                ConversationView(conversation: message3, namespace: animation, retryHandler: { _ in
+                    })
+                ConversationView(
+                    conversation: message3,
+                    namespace: animation,
+                    isReplying: .constant(false), retryHandler: { _ in
                     
-                })
-                ConversationView(conversation: message4, namespace: animation, retryHandler: { _ in
+                    })
+                ConversationView(
+                    conversation: message4,
+                    namespace: animation,
+                    isReplying: .constant(false),
+                    retryHandler: { _ in
                     
-                })
+                    })
             }
             .frame(width: 400)
             .previewLayout(.sizeThatFits)

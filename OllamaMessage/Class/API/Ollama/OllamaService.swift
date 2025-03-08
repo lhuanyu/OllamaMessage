@@ -131,6 +131,17 @@ final class OllamaService: @unchecked Sendable {
 
             currentURLSessionTask = bytes.task
             
+            if isCancellingStream {
+                print("Stopping streaming...")
+                currentURLSessionTask?.cancel()
+                currentURLSessionTask = nil
+                isCancellingStream = false
+                print("Streaming stopped")
+                return AsyncThrowingStream<String, Error> { continuation in
+                    continuation.finish()
+                }
+            }
+            
             return AsyncThrowingStream<String, Error> { continuation in
                 streamingTask = Task(priority: .userInitiated) {
                     do {
@@ -176,12 +187,16 @@ final class OllamaService: @unchecked Sendable {
     
     func stopStreaming() {
         isCancellingStream = true
+        if currentURLSessionTask == nil {
+            return
+        }
         print("Stopping streaming...")
-        streamingTask?.cancel()
         currentURLSessionTask?.cancel()
+        streamingTask?.cancel()
         streamingTask = nil
         currentURLSessionTask = nil
         isCancellingStream = false
+        print("Streaming stopped.")
     }
     
     /// no stream

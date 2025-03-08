@@ -22,6 +22,9 @@ struct MessageListView: View {
     
     var body: some View {
         contentView
+            .onDisappear {
+                session.stop()
+            }
             .alert(
                 "Warning",
                 isPresented: $isShowClearMessagesAlert
@@ -102,7 +105,8 @@ struct MessageListView: View {
                                         conversation: conversation,
                                         namespace: animation,
                                         lastConversationDate: index > 0 ? session.conversations[index - 1].date : nil,
-                                        isLastConversation: index == session.conversations.endIndex - 1
+                                        isLastConversation: index == session.conversations.endIndex - 1,
+                                        isReplying: $session.isReplying
                                     ) { conversation in
                                         Task { @MainActor in
                                             await session.retry(conversation, scroll: {
@@ -146,36 +150,6 @@ struct MessageListView: View {
                                     isTouching = false
                                 }
                             )
-                        }
-                        .preference(key: HeightPreferenceKey.self, value: geo.frame(in: .global).height)
-                        .preference(key: MaxYPreferenceKey.self, value: geo.frame(in: .global).maxY)
-                        .onPreferenceChange(HeightPreferenceKey.self) { value in
-                            Task { @MainActor in
-                                if let value = value {
-                                    if keyboadWillShow {
-                                        keyboadWillShow = false
-                                        withAnimation(.easeOut(duration: 0.1), after: .milliseconds(60)) {
-                                            scrollToBottom(proxy: proxy)
-                                        }
-                                    }
-                                    scrollViewHeight = value
-                                }
-                            }
-                        }
-                        .onPreferenceChange(MaxYPreferenceKey.self) { value in
-                            Task { @MainActor in
-                                if let value = value {
-                                    if let scrollViewMaxY = scrollViewMaxY {
-                                        let delta = scrollViewMaxY - value
-                                        if delta > 0, delta < 30 {
-                                            withAnimation(.easeOut(duration: 0.1)) {
-                                                scrollToBottom(proxy: proxy)
-                                            }
-                                        }
-                                    }
-                                    scrollViewMaxY = value
-                                }
-                            }
                         }
                         .introspect(.scrollView, on: .iOS(.v16, .v17, .v18)) { scrollView in
                             scrollView.clipsToBounds = false
@@ -223,9 +197,6 @@ struct MessageListView: View {
                 if session.conversations.isEmpty {
                     isTextFieldFocused = true
                 }
-            }
-            .onDisappear {
-                session.stop()
             }
             .onChange(of: session) { session in
                 scrollToBottom(proxy: proxy)
@@ -387,27 +358,3 @@ struct MessageListView: View {
 }
 
 extension MessageListView: KeyboardReadable {}
-
-struct ScrollViewOffsetPreferenceKey: PreferenceKey {
-    static let defaultValue: CGFloat? = nil
-    
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
-        value = value ?? nextValue()
-    }
-}
-
-struct MaxYPreferenceKey: PreferenceKey {
-    static let defaultValue: CGFloat? = nil
-    
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
-        value = nextValue() ?? value
-    }
-}
-
-struct HeightPreferenceKey: PreferenceKey {
-    static let defaultValue: CGFloat? = nil
-    
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
-        value = value ?? nextValue()
-    }
-}

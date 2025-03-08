@@ -20,9 +20,7 @@ enum MessageType {
 
 struct Conversation: Identifiable, Codable, Equatable {
     var id = UUID()
-    
-    var isReplying: Bool = false
-    
+        
     var isLast: Bool = false
     
     var input: String

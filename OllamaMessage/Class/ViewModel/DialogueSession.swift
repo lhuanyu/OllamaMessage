@@ -111,10 +111,11 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     private var initFinished = false
     
     @MainActor func stop() {
-        hasCanceled = true
-        if isStreaming {
-            stopStreaming()
+        guard isReplying else {
+            return
         }
+        hasCanceled = true
+        stopStreaming()
     }
 
     // MARK: - Properties
@@ -176,7 +177,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     private func send(text: String, data: Data? = nil, isRetry: Bool = false, scroll: ((UnitPoint) -> Void)? = nil) async {
         var streamText = ""
         var conversation = Conversation(
-            isReplying: true,
             isLast: true,
             input: text,
             inputData: data,
@@ -213,12 +213,15 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 scroll?(.bottom)
             }
             
+            let stream = try await service.sendMessage(text, data: data)
+            
             if hasCanceled {
+                print("Reply Canceled")
                 hasCanceled = false
+                isReplying = false
                 return
             }
             
-            let stream = try await service.sendMessage(text, data: data)
             isStreaming = true
             AudioServicesPlaySystemSound(1301)
             for try await text in stream {
@@ -242,6 +245,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             createSuggestions(scroll: scroll)
         } catch {
             withAnimation {
+                hasCanceled = false
                 isStreaming = false
                 conversation.errorDesc = error.localizedDescription
                 lastConversationData?.sync(with: conversation)
@@ -250,7 +254,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         }
 
         withAnimation {
-            conversation.isReplying = false
             updateLastConversation(conversation)
             isReplying = false
             scroll?(.bottom)
@@ -287,11 +290,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         Task { @MainActor in
             do {
                 let suggestions = try await service.createSuggestions()
-
                 withAnimation {
-                    if self.isReplying {
-                        return
-                    }
                     self.suggestions = suggestions
                 }
                 withAnimation(after: .milliseconds(250)) {
