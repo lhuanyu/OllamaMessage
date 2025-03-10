@@ -87,14 +87,14 @@ struct MessageListView: View {
     
     private let bottomID = "bottomID"
     
-    @State var isTouching = false
+    @State var scrollPhase = UIXScrollPhase.idle
 
     var contentView: some View {
         ScrollViewReader { proxy in
             ZStack(alignment: .bottomLeading) {
                 VStack(spacing: 0) {
                     GeometryReader { geo in
-                        ScrollView {
+                        StatefulScrollView {
                             VStack(spacing: 0) {
                                 ForEach(enumerating: Array(session.conversations.enumerated())) { index, conversation in
                                     ConversationView(
@@ -139,16 +139,12 @@ struct MessageListView: View {
                                 .id(bottomID)
                             }
                             .frame(minHeight: geo.size.height)
-                            .simultaneousGesture(
-                                DragGesture().onChanged { _ in
-                                    isTouching = true
-                                }.onEnded { _ in
-                                    isTouching = false
-                                }
-                            )
                         }
-                        .introspect(.scrollView, on: .iOS(.v16, .v17, .v18)) { scrollView in
-                            scrollView.clipsToBounds = false
+                        .onPreferenceChange(ScrollPhasePreferenceKey.self) { phase in
+                            print(phase)
+                            Task { @MainActor in
+                                scrollPhase = phase
+                            }
                         }
                         .onTapGesture {
                             isTextFieldFocused = false
@@ -236,10 +232,9 @@ struct MessageListView: View {
     
     @MainActor
     private func scrollToBottom(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {
-        if isTouching {
-            return
+        if scrollPhase == .idle || scrollPhase == .animating {
+            proxy.scrollTo(bottomID, anchor: anchor)
         }
-        proxy.scrollTo(bottomID, anchor: anchor)
     }
     
     // MARK: - Search Prompt
@@ -353,13 +348,11 @@ extension MessageListView: KeyboardReadable {}
 
 @available(iOS 17.0, *)
 #Preview {
-    
     @Previewable var session: DialogueSession = {
         let session = DialogueSession()
         session.conversations = Conversation.samples
         return session
     }()
-    
     
     NavigationView {
         MessageListView(session: session)
