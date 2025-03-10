@@ -262,6 +262,16 @@
         }
       }
     },
+    "Keep Alive" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "模型保活时间"
+          }
+        }
+      }
+    },
     "Language Model" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -458,6 +468,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OpenAI 文档"
+          }
+        }
+      }
+    },
+    "Options" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选项"
           }
         }
       }

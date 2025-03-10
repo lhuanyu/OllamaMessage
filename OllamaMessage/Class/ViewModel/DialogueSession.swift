@@ -30,7 +30,8 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         
         init() {
             model = AppConfiguration.shared.model
-            temperature = AppConfiguration.shared.temperature
+            temperature = OllamaConfiguration.shared.temperature
+            numCtx = OllamaConfiguration.shared.numCtx
             systemPrompt = AppConfiguration.shared.systemPrompt
         }
     }

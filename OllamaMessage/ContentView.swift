@@ -17,7 +17,7 @@ struct ContentView: View {
     )
     private var items: FetchedResults<DialogueData>
 
-    @StateObject var configuration = AppConfiguration.shared
+    @EnvironmentObject var configuration: AppConfiguration
     @State var dialogueSessions: [DialogueSession] = []
     @State var selectedDialogueSession: DialogueSession?
 
@@ -67,7 +67,7 @@ struct ContentView: View {
         .navigationSplitViewStyle(.balanced)
         .sheet(isPresented: $isShowSettingView) {
             NavigationStack {
-                AppSettingsView(configuration: configuration)
+                AppSettingsView()
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem {

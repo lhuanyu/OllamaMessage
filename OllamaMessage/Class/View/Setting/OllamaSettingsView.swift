@@ -8,10 +8,16 @@
 import Kingfisher
 import SwiftUI
 
-class OllamaConfiguration: ObservableObject {
-    @MainActor static let shared = OllamaConfiguration()
+class OllamaConfiguration: ObservableObject, @unchecked Sendable {
+    static let shared = OllamaConfiguration()
     
     @AppStorage("ollamaAPIHost") var apiHost: String = ""
+    
+    @AppStorage("ollama.options.temperature") var temperature: Double = 0.8
+    @AppStorage("ollama.options.numCtx") var numCtx: Int = 2048
+    @AppStorage("ollama.options.numKeep") var numKeep: Int = 5
+    @AppStorage("ollama.keepAlive") var keepAlive: Int = 5 * 60
+
     
     @Published var models: [OllamaModel] = []
     @Published var version: String = ""
@@ -58,10 +64,8 @@ class OllamaConfiguration: ObservableObject {
 
 struct OllamaSettingsView: View {
     @AppStorage("configuration.model") var modelName: String = ""
-    
-    @AppStorage("ollamaAPIHost") var apiHost: String = ""
-    
-    @AppStorage("ollamaAPIKey") var apiKey: String = ""
+            
+    @StateObject var configuration = OllamaConfiguration.shared
     
     @State var models = [OllamaModel]()
     
@@ -72,7 +76,43 @@ struct OllamaSettingsView: View {
     var body: some View {
         List {
             Section("API") {
-                TextField("API Host", text: $apiHost)
+                TextField("API Host", text: $configuration.apiHost)
+            }
+            Section("Options") {
+                Stepper(value: $configuration.temperature, in: 0...2, step: 0.1) {
+                    HStack {
+                        Text("Temperature")
+                        Spacer()
+                        Text(String(format: "%.1f", configuration.temperature))
+                            .padding(.horizontal)
+                            .height(32)
+                            .width(60)
+                            .background(Color.secondarySystemFill)
+                            .cornerRadius(8)
+                    }
+                }
+                Stepper(value: $configuration.numCtx, in: 512...20480, step: 512) {
+                    HStack {
+                        Text("Context Size")
+                        Spacer()
+                        Text(String(format: "%d", configuration.numCtx))
+                            .padding(.horizontal)
+                            .height(32)
+                            .background(Color.secondarySystemFill)
+                            .cornerRadius(8)
+                    }
+                }
+                Stepper(value: $configuration.keepAlive, in: -1...3600, step: 30) {
+                    HStack {
+                        Text("Keep Alive")
+                        Spacer()
+                        Text(String(format: "%d s", configuration.keepAlive))
+                            .padding(.horizontal)
+                            .height(32)
+                            .background(Color.secondarySystemFill)
+                            .cornerRadius(8)
+                    }
+                }
             }
             Section {
                 if isFetching {
@@ -127,7 +167,7 @@ struct OllamaSettingsView: View {
         .task {
             await fetchModels()
         }
-        .onChange(of: apiHost) { _ in
+        .onChange(of: configuration.apiHost) { _ in
             Task {
                 await fetchModels()
             }
@@ -146,7 +186,7 @@ struct OllamaSettingsView: View {
     @State private var error: Error?
     
     func fetchModels() async {
-        guard let url = URL(string: apiHost + "/api/tags") else {
+        guard let url = URL(string: configuration.apiHost + "/api/tags") else {
             return
         }
         withAnimation {

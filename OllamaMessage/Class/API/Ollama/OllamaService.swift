@@ -110,6 +110,7 @@ final class OllamaService: @unchecked Sendable {
                     )
                 ],
                 system: configuration.systemPrompt,
+                keep_alive: OllamaConfiguration.shared.keepAlive,
                 options: .init(
                     temperature: configuration.temperature,
                     num_ctx: configuration.numCtx
@@ -206,6 +207,7 @@ final class OllamaService: @unchecked Sendable {
                 model: model ?? configuration.model,
                 messages: includingHistory ? messages + [Message(role: "user", content: input)] : [Message(role: "user", content: input)],
                 stream: false,
+                keep_alive: OllamaConfiguration.shared.keepAlive,
                 options: .init(
                     temperature: configuration.temperature,
                     num_ctx: 4096

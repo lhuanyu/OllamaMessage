@@ -68,6 +68,7 @@ struct OllamaChatRequest: Codable {
     let messages: [Message]
     var stream: Bool?
     var system: String?
+    var keep_alive: Int?
     var options: Options?
 
     struct Options: Codable {

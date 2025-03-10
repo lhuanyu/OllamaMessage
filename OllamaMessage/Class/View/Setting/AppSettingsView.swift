@@ -35,7 +35,7 @@ final class AppConfiguration: ObservableObject, @unchecked Sendable {
 }
 
 struct AppSettingsView: View {
-    @ObservedObject var configuration: AppConfiguration
+    @EnvironmentObject var configuration: AppConfiguration
     
     @State private var selectedModel = ""
         
@@ -174,6 +174,7 @@ extension Bundle {
 
 #Preview {
     NavigationStack {
-        AppSettingsView(configuration: AppConfiguration())
+        AppSettingsView()
+            .environmentObject(AppConfiguration())
     }
 }
