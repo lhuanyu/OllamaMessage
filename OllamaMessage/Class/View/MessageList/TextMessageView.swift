@@ -12,10 +12,8 @@ struct TextMessageView: View {
     var text: String
     var isReplying: Bool
     
-    @EnvironmentObject var appConfiguration: AppConfiguration
-
     var body: some View {
-        if appConfiguration.isMarkdownEnabled {
+        if AppConfiguration.shared.isMarkdownEnabled {
             MessageMarkdownView(
                 think: think,
                 text: text,

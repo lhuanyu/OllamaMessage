@@ -80,11 +80,7 @@ struct MessageListView: View {
                 }
             }
     }
-    
-    @State var scrollViewHeight: CGFloat?
-    
-    @State var scrollViewMaxY: CGFloat?
-    
+            
     @State var keyboadWillShow = false
     
     @Namespace var animation
@@ -354,3 +350,18 @@ struct MessageListView: View {
 }
 
 extension MessageListView: KeyboardReadable {}
+
+@available(iOS 17.0, *)
+#Preview {
+    
+    @Previewable var session: DialogueSession = {
+        let session = DialogueSession()
+        session.conversations = Conversation.samples
+        return session
+    }()
+    
+    
+    NavigationView {
+        MessageListView(session: session)
+    }
+}
