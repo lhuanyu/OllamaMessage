@@ -411,33 +411,8 @@
     "Ollama API Host" : {
       "shouldTranslate" : false
     },
-    "Ollama Message" : {
+    "OMessage" : {
       "shouldTranslate" : false
-    },
-    "OllamaMessage" : {
-      "shouldTranslate" : false
-    },
-    "OllamaMessage will classify your prompt and then select the most appropriate model to handle it." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OllamaMessage会对您的提示进行分类，然后选择最合适的模型来处理它。"
-          }
-        }
-      }
-    },
-    "OllamaMessage will generate reply suggestions based on past conversations." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OllamaMessage将根据过去的对话生成回复建议。"
-          }
-        }
-      }
     },
     "OpenAI" : {
       "extractionState" : "manual",

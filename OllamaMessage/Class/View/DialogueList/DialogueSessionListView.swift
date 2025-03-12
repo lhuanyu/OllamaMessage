@@ -51,7 +51,7 @@ struct DialogueSessionListView: View {
         }
         .onAppear(perform: sortList)
         .listStyle(.plain)
-        .navigationTitle(Text("Ollama Message"))
+        .navigationTitle(Text("OMessage"))
         .onChange(of: isReplying) { _ in
             updateList()
         }

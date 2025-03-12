@@ -10,7 +10,7 @@ import SwiftUI
 struct AboutView: View {
     var body: some View {
         VStack {
-            Text("Ollama Message")
+            Text("OMessage")
                 .font(.title)
                 .bold()
                 .padding(.bottom)
@@ -20,7 +20,7 @@ struct AboutView: View {
                     .fill(Color.white)
                     .frame(width: 120, height: 120)
                     .shadow(radius: 10)
-                Image("ollama")
+                Image("ollama.sunglasses")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 120, height: 120)

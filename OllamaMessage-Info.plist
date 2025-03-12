@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Ollama Message requires access to speech recognition to convert your speech into text for message generation. Your voice data is not stored or shared.</string>
+	<string>OMessage requires access to speech recognition to convert your speech into text for message generation. Your voice data is not stored or shared.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Ollama Message needs access to the microphone to capture your speech for recognition.Your voice data is processed locally and never uploaded to the cloud.</string>
+	<string>OMessage needs access to the microphone to capture your speech for recognition.Your voice data is processed locally and never uploaded to the cloud.</string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Ollama Message requires access to your local network to connect with your Ollama service and process requests. This access is strictly for communication with your locally hosted service and does not connect to external servers.</string>
+	<string>OMessage requires access to your local network to connect with your Ollama service and process requests. This access is strictly for communication with your locally hosted service and does not connect to external servers.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

@@ -114,7 +114,7 @@ struct AppSettingsView: View {
                 }
                 /// Feedback
                 Button {
-                    if let url = URL(string: "mailto:lhuany@gmail.com?subject=Feedback for Ollama Message") {
+                    if let url = URL(string: "mailto:lhuany@gmail.com?subject=Feedback for OMessage") {
                         UIApplication.shared.open(url)
                     }
                 } label: {
