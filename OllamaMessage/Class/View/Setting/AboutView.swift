@@ -20,15 +20,11 @@ struct AboutView: View {
                     .fill(Color.white)
                     .frame(width: 120, height: 120)
                     .shadow(radius: 10)
-                Image("ollama.sunglasses")
+                Image("omessage")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 120, height: 120)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.white, lineWidth: 4)
-                    )
             }
             .padding(.bottom)
             /// Version
