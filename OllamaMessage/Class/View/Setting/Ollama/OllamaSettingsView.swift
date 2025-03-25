@@ -8,60 +8,6 @@
 import Kingfisher
 import SwiftUI
 
-class OllamaConfiguration: ObservableObject, @unchecked Sendable {
-    static let shared = OllamaConfiguration()
-    
-    @AppStorage("ollamaAPIHost") var apiHost: String = ""
-    
-    @AppStorage("ollama.options.temperature") var temperature: Double = 0.8
-    @AppStorage("ollama.options.numCtx") var numCtx: Int = 2048
-    @AppStorage("ollama.options.numKeep") var numKeep: Int = 5
-    @AppStorage("ollama.keepAlive") var keepAlive: Int = 5 * 60
-
-    
-    @Published var models: [OllamaModel] = []
-    @Published var version: String = ""
-    
-    @Published var isFetching = false
-    
-    @Published var error: Error?
-    
-    @MainActor
-    func fetchModels() async {
-        guard let url = URL(string: apiHost + "/api/tags") else {
-            return
-        }
-        withAnimation {
-            error = nil
-            models = []
-            isFetching = true
-        }
-        let request = URLRequest(url: url)
-        do {
-            let (data, _) = try await URLSession.shared.data(for: request)
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let models = try decoder.decode(OllamaModelResponse.self, from: data).models.sorted {
-                $0.name < $1.name
-            }
-            self.models = models
-            if AppConfiguration.shared.model.isEmpty {
-                AppConfiguration.shared.model = models.first?.name ?? ""
-            }
-            print(models)
-        } catch {
-            print(error)
-            withAnimation {
-                self.models = []
-                self.error = error
-            }
-        }
-        withAnimation {
-            isFetching = false
-        }
-    }
-}
-
 struct OllamaSettingsView: View {
     @AppStorage("configuration.model") var modelName: String = ""
             
@@ -77,6 +23,30 @@ struct OllamaSettingsView: View {
         List {
             Section("API") {
                 TextField("API Host", text: $configuration.apiHost)
+            }
+            Section(header: Text("Custom Headers")) {
+                ForEach($configuration.headerItems) { $header in
+                    VStack {
+                        HStack {
+                            Image(systemName: "k.circle.fill")
+                            TextField("Key", text: $header.key)
+                        }
+                        .frame(height: 32)
+
+                        HStack {
+                            Image(systemName: "v.circle.fill")
+                            TextField("Value", text: $header.value)
+                        }
+                        .frame(height: 32)
+                    }
+                }
+                .onDelete { indexSet in
+                    configuration.headerItems.remove(atOffsets: indexSet)
+                }
+                
+                Button(action: addHeader) {
+                    Label("Add Header", systemImage: "plus.circle.fill")
+                }
             }
             Section("Options") {
                 Stepper(value: $configuration.temperature, in: 0...2, step: 0.1) {
@@ -181,6 +151,12 @@ struct OllamaSettingsView: View {
         }
     }
     
+    private func addHeader() {
+        withAnimation {
+            configuration.headerItems.append(HeaderItem(key: "", value: ""))
+        }
+    }
+    
     @State private var isFetching = true
     
     @State private var error: Error?
@@ -194,7 +170,11 @@ struct OllamaSettingsView: View {
             models = []
             isFetching = true
         }
-        let request = URLRequest(url: url)
+        var request = URLRequest(url: url)
+        for header in OllamaConfiguration.shared.headerItems {
+            request.setValue(header.value, forHTTPHeaderField: header.key)
+        }
+        
         do {
             let (data, _) = try await URLSession.shared.data(for: request)
             let decoder = JSONDecoder()

@@ -58,6 +58,7 @@
 		E4CA1DAB2D60C895000F6F44 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CA1DAA2D60C895000F6F44 /* Message.swift */; };
 		E4D69F7B2D5F8190000A15C5 /* OllamaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D69F7A2D5F8190000A15C5 /* OllamaModel.swift */; };
 		E4D69F7E2D5F86F7000A15C5 /* OllamaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D69F7D2D5F86F7000A15C5 /* OllamaService.swift */; };
+		E4E5018E2D92921B003D79C8 /* OllamaConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E5018D2D92921B003D79C8 /* OllamaConfiguration.swift */; };
 		E4E99BC729D415FF00C0FCBD /* DialogueListPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E99BC629D415FF00C0FCBD /* DialogueListPlaceholderView.swift */; };
 		E4E99BCC29D5D58700C0FCBD /* SwiftCSV in Frameworks */ = {isa = PBXBuildFile; productRef = E4E99BCB29D5D58700C0FCBD /* SwiftCSV */; };
 		E4E99BD029D681A000C0FCBD /* PromptsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E99BCF29D681A000C0FCBD /* PromptsListView.swift */; };
@@ -133,6 +134,7 @@
 		E4CA1DAA2D60C895000F6F44 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		E4D69F7A2D5F8190000A15C5 /* OllamaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaModel.swift; sourceTree = "<group>"; };
 		E4D69F7D2D5F86F7000A15C5 /* OllamaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaService.swift; sourceTree = "<group>"; };
+		E4E5018D2D92921B003D79C8 /* OllamaConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaConfiguration.swift; sourceTree = "<group>"; };
 		E4E99BC629D415FF00C0FCBD /* DialogueListPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueListPlaceholderView.swift; sourceTree = "<group>"; };
 		E4E99BCF29D681A000C0FCBD /* PromptsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptsListView.swift; sourceTree = "<group>"; };
 		E4EF056C2A3B3744005CF741 /* OllamaMessage-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OllamaMessage-Info.plist"; sourceTree = "<group>"; };
@@ -176,7 +178,7 @@
 			children = (
 				E4C65EDE29CA9F7800AFA884 /* AppSettingsView.swift */,
 				E41B8B852D6DFDBA00E2325D /* AboutView.swift */,
-				E44349142D5F3A6A00A8D232 /* OllamaSettingsView.swift */,
+				E4E5018C2D929204003D79C8 /* Ollama */,
 				E4E99BCF29D681A000C0FCBD /* PromptsListView.swift */,
 				E4994DEA29D6E655002981D0 /* CustomPromptsView.swift */,
 				E482A5872D7549C8000B20C8 /* SafariView.swift */,
@@ -361,6 +363,15 @@
 			children = (
 				E4D69F7A2D5F8190000A15C5 /* OllamaModel.swift */,
 				E4D69F7D2D5F86F7000A15C5 /* OllamaService.swift */,
+			);
+			path = Ollama;
+			sourceTree = "<group>";
+		};
+		E4E5018C2D929204003D79C8 /* Ollama */ = {
+			isa = PBXGroup;
+			children = (
+				E44349142D5F3A6A00A8D232 /* OllamaSettingsView.swift */,
+				E4E5018D2D92921B003D79C8 /* OllamaConfiguration.swift */,
 			);
 			path = Ollama;
 			sourceTree = "<group>";
@@ -564,6 +575,7 @@
 				E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */,
 				E4C65EA429CA9E7E00AFA884 /* Persistence.swift in Sources */,
 				E4924F0829DEEC0800B69605 /* ErrorMessageView.swift in Sources */,
+				E4E5018E2D92921B003D79C8 /* OllamaConfiguration.swift in Sources */,
 				E4924F0229DEE8CB00B69605 /* ImageMessageView.swift in Sources */,
 				E4BC0F512D7F107900CED720 /* StatefulScrollView.swift in Sources */,
 				E4C65EF029CA9F7800AFA884 /* ConversationView.swift in Sources */,

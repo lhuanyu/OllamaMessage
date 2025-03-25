@@ -123,6 +123,9 @@ final class OllamaService: @unchecked Sendable {
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            for header in OllamaConfiguration.shared.headerItems {
+                request.setValue(header.value, forHTTPHeaderField: header.key)
+            }
             
             let encoder = JSONEncoder()
             request.httpBody = try encoder.encode(chatRequest)
@@ -220,6 +223,9 @@ final class OllamaService: @unchecked Sendable {
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            for header in OllamaConfiguration.shared.headerItems {
+                request.setValue(header.value, forHTTPHeaderField: header.key)
+            }
             
             let encoder = JSONEncoder()
             request.httpBody = try encoder.encode(chatRequest)
