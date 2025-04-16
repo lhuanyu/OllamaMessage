@@ -18,6 +18,7 @@ enum OllamaModelProvider: String {
     case mistral
     case phi
     case gemma
+    case gemma3
     case minicpm_v = "minicpm-v"
     case moondream
     case bakllava
@@ -36,6 +37,8 @@ enum OllamaModelProvider: String {
             return URL(string: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/\(styleName)/qwen-color.png")
         case .gemma, .mistral, .llava:
             return URL(string: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/\(styleName)/\(rawValue)-color.png")
+        case .gemma3:
+            return URL(string: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/\(styleName)/gemma-color.png")
         default:
             return URL(string: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/\(styleName)/ollama.png")
         }
@@ -43,7 +46,7 @@ enum OllamaModelProvider: String {
 
     var isVisionModel: Bool {
         switch self {
-        case .llamaVision, .llava, .moondream, .bakllava, .minicpm_v:
+        case .llamaVision, .llava, .moondream, .bakllava, .minicpm_v, .gemma3:
             return true
         default:
             return false
@@ -84,6 +87,8 @@ extension String {
             return .mistral
         } else if self.hasPrefix("phi") {
             return .phi
+        } else if self.hasPrefix("gemma3") {
+            return .gemma3
         } else if self.hasPrefix("gemma") {
             return .gemma
         } else if self.hasPrefix("llava") {

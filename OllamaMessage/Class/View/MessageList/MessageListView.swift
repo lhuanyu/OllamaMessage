@@ -118,6 +118,11 @@ struct MessageListView: View {
                                     }
                                     .id(index)
                                 }
+                                if session.conversations.isEmpty {
+                                    Color.clear
+                                        .frame(height: geo.size.height - 44)
+                                }
+                                        
                                 Spacer(minLength: 0)
                                 ScrollView(.horizontal) {
                                     HStack {
@@ -136,6 +141,7 @@ struct MessageListView: View {
                                 }
                                 .scrollIndicators(.never)
                                 .frame(maxWidth: .infinity)
+                                .frame(height: 44)
                                 .id(bottomID)
                             }
                             .frame(minHeight: geo.size.height)
