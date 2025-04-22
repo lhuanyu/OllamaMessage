@@ -91,6 +91,7 @@ struct ContentView: View {
         }
         .onChange(of: selectedModelName) { name in
             if let name = name {
+                selectedModelName = nil
                 addItem(modelName: name)
             }
         }
