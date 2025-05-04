@@ -20,7 +20,7 @@ class OllamaConfiguration: ObservableObject, @unchecked Sendable {
     @AppStorage("ollamaAPIHost") var apiHost: String = ""
     
     @AppStorage("ollama.options.temperature") var temperature: Double = 0.8
-    @AppStorage("ollama.options.numCtx") var numCtx: Int = 2048
+    @AppStorage("ollama.options.numCtx") var numCtx: Int = 4096
     @AppStorage("ollama.options.numKeep") var numKeep: Int = 5
     @AppStorage("ollama.keepAlive") var keepAlive: Int = 5 * 60
 

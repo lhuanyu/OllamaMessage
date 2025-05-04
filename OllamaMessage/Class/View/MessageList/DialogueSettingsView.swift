@@ -44,7 +44,7 @@ struct DialogueSettingsView: View {
                         }
                     }
                 }
-                Stepper(value: $configuration.numCtx, in: 512...20480, step: 512) {
+                Stepper(value: $configuration.numCtx, in: 512...40960, step: 512) {
                     HStack {
                         Text("Context Size")
                         Spacer()

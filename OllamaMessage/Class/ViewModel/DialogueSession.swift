@@ -24,7 +24,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 
         var temperature: Double = 0.8
         
-        var numCtx: Int = 2048
+        var numCtx: Int = 4096
         
         var systemPrompt: String?
         
