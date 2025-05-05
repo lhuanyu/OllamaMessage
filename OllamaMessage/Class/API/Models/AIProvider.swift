@@ -10,6 +10,7 @@ import Foundation
 enum OllamaModelProvider: String {
     case qwen
     case qwq
+    case qwen3
     case deepseek_r1 = "deepseek-r1"
     case deepseek
     case llama
@@ -17,6 +18,7 @@ enum OllamaModelProvider: String {
     case llava
     case mistral
     case phi
+    case phi4_resoning
     case gemma
     case gemma3
     case minicpm_v = "minicpm-v"
@@ -33,7 +35,7 @@ enum OllamaModelProvider: String {
             return URL(string: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/\(styleName)/meta-color.png")
         case .deepseek, .deepseek_r1:
             return URL(string: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/\(styleName)/deepseek-color.png")
-        case .qwen, .qwq:
+        case .qwen, .qwq, .qwen3:
             return URL(string: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/\(styleName)/qwen-color.png")
         case .gemma, .mistral, .llava:
             return URL(string: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/\(styleName)/\(rawValue)-color.png")
@@ -55,7 +57,7 @@ enum OllamaModelProvider: String {
 
     var isReasoningModel: Bool {
         switch self {
-        case .qwq, .deepseek_r1:
+        case .qwq, .deepseek_r1, .qwen3, .phi4_resoning:
             return true
         default:
             return false
@@ -75,6 +77,8 @@ extension String {
     var ollamaModelProvider: OllamaModelProvider {
         if let model = OllamaModelProvider(rawValue: self.components(separatedBy: ":").first ?? self) {
             return model
+        } else if self.hasPrefix("qwen3") {
+            return .qwen3
         } else if self.hasPrefix("qwen") {
             return .qwen
         } else if self.hasPrefix("qwq") {
@@ -85,6 +89,8 @@ extension String {
             return self.contains("vision") ? .llamaVision : .llama
         } else if self.hasPrefix("mistral") {
             return .mistral
+        } else if self.hasPrefix("phi4") && self.hasSuffix("reasoning") {
+            return .phi4_resoning
         } else if self.hasPrefix("phi") {
             return .phi
         } else if self.hasPrefix("gemma3") {
