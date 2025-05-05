@@ -20,6 +20,9 @@ struct ContentView: View {
     @EnvironmentObject var configuration: AppConfiguration
     @State var dialogueSessions: [DialogueSession] = []
     @State var selectedDialogueSession: DialogueSession?
+    
+    // 添加一个参数来接收从Spotlight搜索打开的会话ID
+    @Binding var spotlightSessionId: UUID?
 
     @State var isShowSettingView = false
 
@@ -95,6 +98,12 @@ struct ContentView: View {
                 addItem(modelName: name)
             }
         }
+        .onChange(of: spotlightSessionId) {
+            if let sessionId = $0 {
+                openSessionFromSpotlight(withId: sessionId)
+                spotlightSessionId = nil
+            }
+        }
         .onAppear {
             dialogueSessions = items.compactMap {
                 DialogueSession(rawData: $0)
@@ -155,6 +164,11 @@ struct ContentView: View {
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
+            // Remove sessions from search index before deleting them
+            offsets.map { dialogueSessions[$0] }.forEach { session in
+                AppSearchHandler.shared.deindexDialogueSession(session)
+            }
+
             dialogueSessions.remove(atOffsets: offsets)
             offsets.map { items[$0] }.forEach(viewContext.delete)
 
@@ -171,6 +185,9 @@ struct ContentView: View {
 
     private func deleteItem(_ session: DialogueSession) {
         withAnimation {
+            // Remove session from search index before deleting it
+            AppSearchHandler.shared.deindexDialogueSession(session)
+
             dialogueSessions.removeAll {
                 $0.id == session.id
             }
@@ -186,6 +203,30 @@ struct ContentView: View {
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
+        }
+    }
+    
+    // 添加根据ID查找并打开会话的方法
+    private func openSessionFromSpotlight(withId sessionId: UUID) {
+        // 查找具有指定ID的会话
+        if let sessionToOpen = dialogueSessions.first(where: { $0.id == sessionId }) {
+            // 打开找到的会话
+            selectedDialogueSession = sessionToOpen
+            
+            // 在iPad或Mac上，确保显示详情视图
+            if UIDevice.current.userInterfaceIdiom == .pad || 
+               UIDevice.current.userInterfaceIdiom == .mac {
+                columnVisibility = .detailOnly
+                
+                // 延迟后恢复到双栏显示，这样用户可以看到侧边栏
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    withAnimation {
+                        self.columnVisibility = .doubleColumn
+                    }
+                }
+            }
+        } else {
+            print("找不到ID为\(sessionId)的会话")
         }
     }
 }

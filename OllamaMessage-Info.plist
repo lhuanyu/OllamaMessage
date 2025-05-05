@@ -15,5 +15,23 @@
 	</dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>CSSearchableItemActionHandler</key>
+	<string>$(PRODUCT_MODULE_NAME).AppSearchHandler</string>
+	<key>CoreSpotlightContinuation</key>
+	<true/>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>com.ollamamesssage.searchable</string>
+	</array>
+	<key>CSSearchableItemQueryHandler</key>
+	<string>$(PRODUCT_MODULE_NAME).AppSearchHandler</string>
+	<key>CSSearchableItemActivityIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CSSearchableItemKeywords</key>
+	<array>
+		<string>ollama</string>
+		<string>chatgpt</string>
+		<string>ai</string>
+	</array>
 </dict>
 </plist>
